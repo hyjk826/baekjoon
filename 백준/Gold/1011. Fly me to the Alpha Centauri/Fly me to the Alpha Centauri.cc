@@ -1,0 +1,29 @@
+// 2022-07-16
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
+#define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
+#define ll long long
+#define MAX 2147000000
+#define MOD 1000000007
+using namespace std;
+
+int main() {
+	fastio;
+	int t;
+    cin >> t;
+    while(t--){
+        int a, b;
+        cin >> a >> b;
+        double d = sqrt(b - a);
+        int r = round(d);
+        if(d <= r) cout << r * 2 - 1 << "\n";
+        else cout << r * 2 << "\n";
+    }
+}
