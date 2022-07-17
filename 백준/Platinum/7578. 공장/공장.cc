@@ -49,17 +49,17 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> A[i];
     }
-    map<int, int> m;
+    vi ch(1000001);
     for(int i{0}; i < n; ++i){
         int a;
         cin >> a;
-        m[a] = i;
+        ch[a] = i;
     }
     ll ans{0};
     binary_indexed_tree<int> BIT(n + 1);
     for(int i{0}; i < n; ++i){
-        ans += BIT.f(m[A[i]] + 1, n - 1);
-        BIT.add(m[A[i]], 1);
+        ans += BIT.f(ch[A[i]] + 1, n - 1);
+        BIT.add(ch[A[i]], 1);
     }
     cout << ans;
 }
