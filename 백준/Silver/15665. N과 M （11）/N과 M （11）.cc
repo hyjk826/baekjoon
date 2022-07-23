@@ -38,10 +38,10 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> vec[i];
     }
+    sort(vec.begin(), vec.end());
+    vec.erase(unique(vec.begin(), vec.end()), vec.end());
     vi v;
     dfs(0, v);
-    sort(ans.begin(), ans.end());
-    ans.erase(unique(ans.begin(), ans.end()), ans.end());
     for(auto& i : ans){
         for(auto& j : i){
             cout << j << " ";
