@@ -35,6 +35,7 @@ int main() {
         for(int i{(int)R.size() - 1}; i >= 0; --i){
             if(R[i] == n - 2 && A[n - 1] != 0){
                 A[n - 1]--;
+                if(A[n - 1] == 0) cnt++;
                 R[i]++;
                 continue;
             }
@@ -43,14 +44,16 @@ int main() {
             if(it == R.end() && A[next] != 0){
                 R[i] = next;
                 A[next]--;
+                if(A[next] == 0) cnt++;
             }
         }
         while(!R.empty() && R.back() == n - 1) R.pop_back();
         if (A[0] != 0) {
             R.insert(R.begin(), 0);
             A[0]--;
+            if(A[0] == 0) cnt++;
         } 
-        if (count(A.begin(), A.end(), 0) >= k) {
+        if (cnt >= k) {
             cout << Level;
             return 0;
         }
