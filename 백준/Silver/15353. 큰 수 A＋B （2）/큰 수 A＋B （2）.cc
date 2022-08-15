@@ -21,7 +21,7 @@ int main() {
     cin >> s >> t;
     reverse(s.begin(), s.end());
     reverse(t.begin(), t.end());
-    vi vec((max(s.size(), t.size())));
+    vi vec((max(s.size(), t.size())) + 1);
     for(int i{0}; i < (int)vec.size(); ++i){
         if(i < (int)s.size()) vec[i] += s[i] - '0';
         if(i < (int)t.size()) vec[i] += t[i] - '0';
@@ -29,16 +29,13 @@ int main() {
     string ans;
     for(int i{0}; i < (int)vec.size(); ++i){
         if(vec[i] >= 10){
-            if(i == (int)vec.size() - 1){
-                ans += char('0' + vec[i] - 10);
-                ans += char('0' + 1);                
-                break;
-            }
             vec[i] -= 10;
             vec[i + 1]++;
         }
         ans += char('0' + vec[i]);
     }
+    if(ans.back() == '0') ans.pop_back();
     reverse(ans.begin(), ans.end());
     cout << ans;
 }
+
