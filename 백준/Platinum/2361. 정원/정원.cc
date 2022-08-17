@@ -15,12 +15,6 @@
 #define MOD 1000000007
 using namespace std;
 
-double dis(pair<double, double>  a, pair<double, double> b){
-    double x = a.first - b.first;
-    double y = a.second - b.second;
-    return sqrt(x * x + y * y);
-}
-
 int main() {
 	fastio;
     int n;
@@ -72,4 +66,3 @@ int main() {
     cout << mn << "\n";
     cout << ansx << " " << ansy;
 }
-
