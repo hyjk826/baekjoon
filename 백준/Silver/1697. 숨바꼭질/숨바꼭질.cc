@@ -1,45 +1,44 @@
-// 2022-09-06
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <queue>
 using namespace std;
 
 int main() {
-	fastio;
-    int n, k;
-    cin >> n >> k;
-    vi ch(200001, -1);
-    ch[n] = 0;
-    queue<int> Q;
-    Q.push(n);
-    while(!Q.empty()){
-        int x{Q.front()};
-        Q.pop();
-        if(x >= 1 && ch[x - 1] == -1){
-            ch[x - 1] = ch[x] + 1;
-            Q.push(x - 1);
-        }
-        if(x + 1 <= 200000 && ch[x + 1] == -1){
-            ch[x + 1] = ch[x] + 1;
-            Q.push(x + 1);
-        }
-        if(2 * x <= 200000 && ch[x * 2] == -1){
-            ch[x * 2] = ch[x] + 1;
-            Q.push(2 * x);
-        }
-    }
-    cout << ch[k];
+	int n, k;
+	int xx[]{ -1,1,2 };
+	cin >> n >> k;
+	if (n == k) {
+		cout << 0;
+		return 0;
+	}
+	int map[100001]{};
+	int dis[100001]{};
+	queue<int> Q;
+	dis[n] = 0;
+	Q.push(n);
+	while (!Q.empty()) {
+		int x{ Q.front() };
+		Q.pop();
+		int next_x;
+		for (int i{ 0 }; i < 3; ++i) {
+			if (i < 2) {
+				next_x = x + xx[i];
+			}
+			if (i == 2) {
+				next_x = x * xx[i];
+			}
+			if (next_x < 0 || next_x > 100000)
+				continue;
+			if (next_x == k) {
+				cout << dis[x] + 1;
+				return 0;
+			}
+			if (dis[next_x] == 0 && next_x != n) {
+				Q.push(next_x);
+				dis[next_x] = dis[x] + 1;
+			}
+		}
+	}
 }
-	
-
