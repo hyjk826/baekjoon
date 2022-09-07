@@ -17,7 +17,7 @@ using namespace std;
 
 struct st{
     int x, y, d;
-    bool operator< (const st a){
+    bool operator< (const st a) const{
         return d > a.d;
     }
 };
@@ -33,16 +33,16 @@ int main() {
         }
     }
     vector<vi> ans(n, vi(m, (int)1e9));
-    deque<st> Q;    
-    Q.push_back({0, 0, 0});
+    priority_queue<st> Q;    
+    Q.push({0, 0, 0});
     ans[0][0] = board[0][0];
     int xx[]{-1,0,1,0};
     int yy[]{0,1,0,-1};
     while(!Q.empty()){
-        int x{Q.front().x};
-        int y{Q.front().y};
-        int d{Q.front().d};
-        Q.pop_front();
+        int x{Q.top().x};
+        int y{Q.top().y};
+        int d{Q.top().d};
+        Q.pop();
         if(ans[x][y] < d) continue;
         for(int dir{0}; dir < 4; ++dir){
             int nx{x + xx[dir]};
@@ -50,10 +50,7 @@ int main() {
             if(nx < 0 || nx > n - 1 || ny < 0 || ny > m - 1 || board[nx][ny] == -1) continue;
             if(ans[nx][ny] > ans[x][y] + board[nx][ny]){                
                 ans[nx][ny] = ans[x][y] + board[nx][ny];
-                if(board[nx][ny] == 0){
-                    Q.push_front({nx, ny, ans[nx][ny]});
-                }
-                else Q.push_back({nx, ny, ans[nx][ny]});
+                Q.push({nx, ny, ans[nx][ny]}); 
             }
         }
     }
