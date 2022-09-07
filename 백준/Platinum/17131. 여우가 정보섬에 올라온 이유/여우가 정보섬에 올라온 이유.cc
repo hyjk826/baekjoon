@@ -52,36 +52,27 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> vec[i].first >> vec[i].second;
         mp[vec[i].first]++;
-        st.insert(vec[i].second);
     }
     sort(vec.begin(), vec.end());
-    map<int, int> mm;
-    int k{0};
-    for(auto& i : st){
-        mm[i] = k++;
-    }
-    for(int i{0}; i < n; ++i){
-        vec[i].second = mm[vec[i].second];
-    }
     map<int, int> mp2;
     map<int, int> mp3;
     vi a(n), b(n);
     binary_indexed_tree<int> A(400001), B(400001);
     for(int i{0}; i < n; ++i){
-        a[i] = A.f(vec[i].second + 1, 400000);
+        a[i] = A.f(vec[i].second + 1 + 200000, 400000);
         mp2[vec[i].first]++;
         if(mp2[vec[i].first] == mp[vec[i].first]){
             for(int j{i}; j > i - mp[vec[i].first]; --j){
-                A.add(vec[j].second, 1);
+                A.add(vec[j].second + 200000, 1);
             }
         }
     }
     for(int i{n - 1}; i >= 0; --i){
-        b[i] = B.f(vec[i].second + 1, 400000);
+        b[i] = B.f(vec[i].second + 1 + 200000, 400000);
         mp3[vec[i].first]++;
         if(mp3[vec[i].first] == mp[vec[i].first]){
             for(int j{i}; j < i + mp[vec[i].first]; ++j){
-                B.add(vec[j].second, 1);                
+                B.add(vec[j].second + 200000, 1);                
             }
         }
     }
