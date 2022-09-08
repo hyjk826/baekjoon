@@ -1,4 +1,4 @@
-// 2022-07-31
+// 2022-09-08
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -19,39 +19,28 @@ int main() {
 	fastio;
     int n, d, k, c;
     cin >> n >> d >> k >> c;
-    vi vec(n * 2);
+    unordered_map<int, int> mp;
+    vi vec(n);
     for(int i{0}; i < n; ++i){
         cin >> vec[i];
-        vec[i + n] = vec[i];
     }
-    map<int, int> m;
     for(int i{0}; i < k; ++i){
-        m[vec[i]]++;
+        vec.push_back(vec[i]);
+        mp[vec[i]]++;
     }
     int ans;
-    if(m.count(c)) ans = m.size();
-    else ans = m.size() + 1;
-    int cnt = m.size();
-    for(int i{k}; i < n * 2; ++i){
-        if(!m.count(vec[i])){
-            cnt++;
+    if(mp.count(c) && mp[c] >= 1) ans = (int)mp.size();
+    else ans = (int)mp.size() + 1;
+    for(int i{k}; i < (int)vec.size(); ++i){
+        mp[vec[i]]++;
+        mp[vec[i - k]]--;
+        if(mp[vec[i - k]] == 0){
+            mp.erase(vec[i - k]);
         }
-        else{
-            if(m[vec[i]] == 0) cnt++; 
-        }
-        m[vec[i]]++;
-        m[vec[i - k]]--;
-        if(m[vec[i - k]] == 0){
-           cnt--; 
-        }
-        if(m.count(c) == 0){
-            ans = max(ans, cnt + 1);
-        }
-        else{
-            if(m[c] == 0) ans = max(ans, cnt + 1);
-            else ans = max(ans, cnt);
-        }
+        if(mp.count(c) && mp[c] >= 1) ans = max(ans, (int)mp.size());
+        else ans = max(ans, (int)mp.size() + 1);
     }
     cout << ans;
 }
+	
 
