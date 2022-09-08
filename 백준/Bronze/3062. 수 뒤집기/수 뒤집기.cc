@@ -1,4 +1,4 @@
-// 2022-08-23
+// 2022-09-09
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -8,7 +8,6 @@
 #define vc vector<char>
 #define vs vector<string>
 #define pi pair<int, int>
-#define pl pair<ll, ll>
 #define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
@@ -21,18 +20,18 @@ bool f(string str){
     }
     return true;
 }
-int main() {
-	fastio;
+
+int main(){
+    fastio;
     int t;
     cin >> t;
     while(t--){
         string str;
         cin >> str;
-        string r = str;
-        reverse(r.begin(), r.end());
-        string t = to_string(stoi(str) + stoi(r));
-        if(f(t)) cout << "YES\n";
+        string c = str;
+        reverse(c.begin(), c.end());
+        int k = stoi(str) + stoi(c);
+        if(f(to_string(k))) cout << "YES\n";
         else cout << "NO\n";
     }
 }
-
