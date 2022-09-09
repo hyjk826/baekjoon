@@ -18,7 +18,7 @@ int main(){
     fastio;
     int n, m;
     cin >> n;
-    set<int> st;
+    unordered_set<int> st;
     for(int i{0}; i < n; ++i){
         int a;
         cin >> a;
