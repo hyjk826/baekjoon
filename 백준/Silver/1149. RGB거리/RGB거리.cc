@@ -1,4 +1,4 @@
-// 2022-09-06
+// 2022-09-10
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -8,15 +8,14 @@
 #define vc vector<char>
 #define vs vector<string>
 #define pi pair<int, int>
-#define pl pair<ll, ll>
 #define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-int main() {
-	fastio;
+int main(){
+    fastio;
     int n;
     cin >> n;
     vector<vi> board(n, vi(3));
@@ -25,19 +24,18 @@ int main() {
             cin >> board[i][j];
         }
     }
-    vector<vi> dp(n, vi(3, MAX));
-    for(int i{0}; i < 3; ++i){
-        dp[0][i] = board[0][i];
-    }
     for(int i{1}; i < n; ++i){
         for(int j{0}; j < 3; ++j){
-            for(int k{0}; k < 3; ++k){
-                if(j == k) continue;
-                dp[i][j] = min(dp[i][j], dp[i - 1][k] + board[i][j]);
+            if(j == 0){
+                board[i][j] += min(board[i - 1][1], board[i - 1][2]);
+            }
+            else if(j == 1){
+                board[i][j] += min(board[i - 1][0], board[i - 1][2]);
+            }
+            else{
+                board[i][j] += min(board[i - 1][0], board[i - 1][1]);
             }
         }
     }
-    cout << min({dp[n - 1][0], dp[n - 1][1], dp[n - 1][2]});
+    cout << min({board[n - 1][0], board[n - 1][1], board[n - 1][2]});
 }
-	
-
