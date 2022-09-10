@@ -1,44 +1,42 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
-#include <vector>
-#include <queue>
+// 2022-09-10
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
+#define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
+#define pi pair<int, int>
+#define vp vector<pi>
+#define ll long long
+#define MAX 2147000000
+#define MOD 1000000007
 using namespace std;
 
-int main() {
-	int n, k;
-	int xx[]{ -1,1,2 };
-	cin >> n >> k;
-	if (n == k) {
-		cout << 0;
-		return 0;
-	}
-	int map[100001]{};
-	int dis[100001]{};
-	queue<int> Q;
-	dis[n] = 0;
-	Q.push(n);
-	while (!Q.empty()) {
-		int x{ Q.front() };
-		Q.pop();
-		int next_x;
-		for (int i{ 0 }; i < 3; ++i) {
-			if (i < 2) {
-				next_x = x + xx[i];
-			}
-			if (i == 2) {
-				next_x = x * xx[i];
-			}
-			if (next_x < 0 || next_x > 100000)
-				continue;
-			if (next_x == k) {
-				cout << dis[x] + 1;
-				return 0;
-			}
-			if (dis[next_x] == 0 && next_x != n) {
-				Q.push(next_x);
-				dis[next_x] = dis[x] + 1;
-			}
-		}
-	}
+int main(){
+    fastio;
+    vi cnt(200001, -1);
+    int a, b;
+    cin >> a >> b;
+    cnt[a] = 0;
+    queue<int> Q;
+    Q.push(a);
+    while(!Q.empty()){
+        int x{Q.front()};
+        Q.pop();
+        if(x * 2 <= 200000 && cnt[x * 2] == -1){
+            cnt[x * 2] = cnt[x] + 1;
+            Q.push(x * 2);
+        }
+        if(x - 1 >= 0 && cnt[x - 1] == -1){
+            cnt[x - 1] = cnt[x] + 1;
+            Q.push(x - 1);
+        }
+        if(x + 1 <= 200000 && cnt[x + 1] == -1){
+            cnt[x + 1] = cnt[x] + 1;
+            Q.push(x + 1);
+        }
+    }
+    cout << cnt[b];
 }
