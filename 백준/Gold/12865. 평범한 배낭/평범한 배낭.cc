@@ -1,4 +1,4 @@
-// 2022-09-06
+// 2022-09-11
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -8,32 +8,25 @@
 #define vc vector<char>
 #define vs vector<string>
 #define pi pair<int, int>
-#define pl pair<ll, ll>
 #define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-int main() {
-	fastio;
+int main(){
+    fastio;
     int n, k;
     cin >> n >> k;
-    vi dp(k + 1, -MAX);
-    dp[0] = 0;
+    vp vec(n);
     for(int i{0}; i < n; ++i){
-        int a, b;
-        cin >> a >> b;
-        for(int j{k - a}; j >= 0; --j){
-            if(dp[j] == -1) continue;
-            dp[j + a] = max(dp[j + a], dp[j] + b);
+        cin >> vec[i].first >> vec[i].second;
+    }
+    vi dp(k + 1);
+    for(int i{0}; i < n; ++i){
+        for(int j{k}; j >= vec[i].first; --j){
+            dp[j] = max(dp[j], dp[j - vec[i].first] + vec[i].second);
         }
     }
-    int ans{0};
-    for(int i{0}; i <= k; ++i){
-        ans = max(ans, dp[i]);
-    }
-    cout << ans;
+    cout << *max_element(dp.begin(), dp.end());
 }
-	
-
