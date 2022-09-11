@@ -18,7 +18,7 @@ int main(){
     fastio;
     int n, m;
     cin >> n >> m;
-    map<string, string> mp;
+    unordered_map<string, string> mp;
     for(int i{0}; i < n; ++i){
         string s, t;
         cin >> s >> t;
