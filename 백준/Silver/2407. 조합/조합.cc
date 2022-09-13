@@ -1,4 +1,4 @@
-// 2022-07-16
+// 2022-09-13
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -6,51 +6,52 @@
 #define vi vector<int>
 #define vl vector<long long>
 #define vc vector<char>
+#define vs vector<string>
 #define pi pair<int, int>
 #define pl pair<ll, ll>
 #define vp vector<pi>
-#define vs vector<string>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-vector<vs> dp(101, vs(101));
-string f(string s, string t){
-    int n = max((int)s.size(), (int)t.size());
-    if((int)s.size() > (int)t.size()){
-        t = string((int)s.size() - (int)t.size(), '0') + t;
-    }
-    else{
-        s = string((int)t.size() - (int)s.size(), '0') + s;
-    }
-    vi vec(n + 1);
-    for(int i{n}; i >= 1; --i){
-        vec[i] += s[i - 1] - '0' + t[i - 1] - '0';
-        if(vec[i] >= 10){
-            vec[i] -= 10;
-            vec[i - 1]++;
-        }
-    }
+string f(string a, string b){
     string r;
-    if(vec.front() != 0){
-        r += vec.front() + '0';
+    int n = (int)a.size();
+    int m = (int)b.size();
+    reverse(a.begin(), a.end());
+    reverse(b.begin(), b.end());
+    vi vec(max(n, m));
+    for(int i{0}; i < (int)vec.size(); ++i){
+        if(i < (int)a.size()) vec[i] += a[i] - '0';
+        if(i < (int)b.size()) vec[i] += b[i] - '0';
     }
-    for(int i{1}; i <= n; ++i){
-        r += vec[i] + '0';
+    for(int i{0}; i < (int)vec.size() - 1; ++i){
+        vec[i + 1] += vec[i] / 10;
+        vec[i] %= 10;
+        r += char('0' + vec[i]);
     }
+    r += char('0' + (vec.back() % 10));
+    if(vec.back() >= 10){        
+        r += '1';
+    }
+    reverse(r.begin(), r.end());
     return r;
 }
 
-string DP(int n, int m){
-    if(dp[n][m].size() != 0) return dp[n][m];
-    if(n == m || m == 0) return dp[n][m] = '1';
-    return dp[n][m] = f(DP(n - 1, m - 1), DP(n - 1, m));
+string com[101][101]{};
+
+string ff(int n, int m){
+    if(com[n][m].size() != 0) return com[n][m];
+    if(n == m || m == 0) return com[n][m] = "1";
+    return com[n][m] = f(ff(n - 1, m - 1), ff(n - 1, m));
 }
 
 int main() {
 	fastio;
     int n, m;
     cin >> n >> m;
-    cout << DP(n, m);
+    cout << ff(n, m);
 }
+	
+
