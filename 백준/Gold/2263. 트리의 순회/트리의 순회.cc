@@ -1,4 +1,4 @@
-// 2022-07-25
+// 2022-09-13
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -42,4 +42,3 @@ int main() {
     }
     f(1, n, 1, n);
 }
-
