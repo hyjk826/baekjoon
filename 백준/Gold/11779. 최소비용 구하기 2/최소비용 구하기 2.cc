@@ -57,10 +57,9 @@ int main() {
     }
     int k = e;
     vi ans;
-    for(int i{e}; i != s; i = p[i]){
+    for(int i{e}; i != 0; i = p[i]){
         ans.push_back(i);
     }
-    ans.push_back(s);
     reverse(ans.begin(), ans.end());
     cout << dijk[e] << "\n" << ans.size() << "\n";
     for(auto& i : ans){
