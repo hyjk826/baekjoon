@@ -29,7 +29,7 @@ int main() {
         int a;
         cin >> a;
         int idx = upper_bound(vec.begin(), vec.end(), a) - vec.begin();
-        while(idx <= n && ch[idx]) idx++;
+        while(idx <= m && ch[idx]) idx++;
         cout << vec[idx] << "\n";
         ch[idx] = 1;
     }
