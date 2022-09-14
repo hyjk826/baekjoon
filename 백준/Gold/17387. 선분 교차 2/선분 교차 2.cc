@@ -1,4 +1,4 @@
-// 2022-07-29
+// 2022-09-14
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -38,17 +38,13 @@ bool isIntersect(pair<pl, pl> x, pair<pl, pl> y){
     return ab <= 0 && cd <= 0;
 }
 
-
 int main() {
 	fastio;
-    vl A(4), B(4);
-    for(int i{0}; i < 4; ++i) cin >> A[i];
-    for(int i{0}; i < 4; ++i) cin >> B[i];
-    pl a = {A[0], A[1]};
-    pl b = {A[2], A[3]};
-    pl c = {B[0], B[1]};
-    pl d = {B[2], B[3]};
-    if(isIntersect({a, b}, {c, d})) cout << 1;
+    pair<pl, pl> x, y;
+    cin >> x.first.first >> x.first.second >> x.second.first >> x.second.second;
+    cin >> y.first.first >> y.first.second >> y.second.first >> y.second.second;
+    if(isIntersect(x, y)) cout << 1;
     else cout << 0;
 }
+	
 
