@@ -16,11 +16,13 @@
 using namespace std;
 
 string str;
+vector<vi> vec(2500, vi(2500, -1));
 
 bool f(int l, int r){
     if(l > r) return 1;
-    if(str[l] == str[r]) return f(l + 1, r - 1);
-    else return 0;
+    if(vec[l][r] != -1) return vec[l][r];
+    if(str[l] == str[r]) return vec[l][r] = f(l + 1, r - 1);
+    else return vec[l][r] = 0;
 }
 
 int main() {
