@@ -24,7 +24,7 @@ int main() {
         cin >> vec[i];
     }
     sort(vec.begin(), vec.end());
-    vi ch(n + 1);
+    vi ch(m);
     for(int i{0}; i < k; ++i){
         int a;
         cin >> a;
