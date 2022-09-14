@@ -1,64 +1,55 @@
-#include <iostream>
-#include <vector>
-#include <iomanip>
-#include <cmath>
-#include <algorithm>
+// 2022-09-14
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
+#define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
+#define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
 #define ll long long
-#define MAX 3000000000
+#define MAX 1000000000
+#define MOD 1000000007
 using namespace std;
 
-vector<ll> vec;
-int n;
-ll mn{ MAX };
-ll r1, r2, r3;
-
-void asd(int i) {
-	int s = 0;
-	int e = n - 1;
-	while (s < e) {
-		if (abs(mn) > abs(vec[s] + vec[e] + vec[i])) {
-			r1 = vec[s];
-			r2 = vec[e];
-			r3 = vec[i];
-			mn = vec[s] + vec[e] + vec[i];
-		}
-		if (vec[s] + vec[e] + vec[i] < 0) {
-			s++;
-			if (s == i) {
-				s++;
-			}
-		}
-		else if (vec[s]+vec[e]+vec[i] > 0) {
-			e--;
-			if (e == i) {
-				e--;
-			}
-		}
-		else {
-			break;
-		}
-	}
-}
-
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cin >> n;
-	for (int i{ 0 }; i < n; ++i) {
-		ll a;
-		cin >> a;
-		vec.push_back(a);
-	}
-	sort(vec.begin(), vec.end());
-	for (int i{ 1 }; i < n-1; ++i) {
-		asd(i);
-	}
-	vector<ll> ans;
-	ans.push_back(r1);
-	ans.push_back(r2);
-	ans.push_back(r3);
-	sort(ans.begin(), ans.end());
-	for (int i{ 0 }; i < 3; ++i) {
-		cout << ans[i] << " ";
-	}
+	fastio;
+    int n;
+    cin >> n;
+    vl vec(n);
+    for(int i{0}; i < n; ++i) cin >> vec[i];
+    sort(vec.begin(), vec.end());
+    if(vec[0] >= 0){
+        cout << vec[0] << " " << vec[1] << " " << vec[2];
+    }
+    else{
+        ll a{0}, b{0}, c{(ll)1e16};
+        for(int i{0}; i < n; ++i){
+            int l = i + 1;
+            int r = n - 1;
+            ll x{0}, y{(ll)1e16};
+            while(l < r){
+                ll sum = vec[l] + vec[r];
+                if(abs(sum + vec[i]) < abs(x + y + vec[i])){
+                    x = vec[l];
+                    y = vec[r];
+                }
+                if(sum >= -vec[i]){
+                    r--;
+                }
+                else l++;
+            }
+            if(abs(vec[i] + x + y) < abs(a + b + c)){
+                a = vec[i];
+                b = x;
+                c = y;
+            }
+        }
+        cout << a << " " << b << " " << c;
+    }
 }
+	
+
