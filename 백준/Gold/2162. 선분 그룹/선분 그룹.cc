@@ -1,4 +1,4 @@
-// 2022-07-29
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -38,25 +38,20 @@ bool isIntersect(pair<pi, pi> x, pair<pi, pi> y){
     return ab <= 0 && cd <= 0;
 }
 
-struct st{
-    int x1, y1, x2, y2;
-};
-
-vi graph[3000];
-
 int main() {
 	fastio;
     int n;
     cin >> n;
-    vector<st> vec(n);
+    vector<pair<pi, pi> > vec(n);
     for(int i{0}; i < n; ++i){
-        cin >> vec[i].x1 >> vec[i].y1 >> vec[i].x2 >> vec[i].y2;
-    }    
+        cin >> vec[i].first.first >> vec[i].first.second >> vec[i].second.first >> vec[i].second.second;
+    }
+    vector<vi> g(n);
     for(int i{0}; i < n; ++i){
         for(int j{i + 1}; j < n; ++j){
-            if(isIntersect({{vec[i].x1, vec[i].y1}, {vec[i].x2, vec[i].y2}}, {{vec[j].x1, vec[j].y1}, {vec[j].x2, vec[j].y2}})){
-                graph[i].push_back(j);
-                graph[j].push_back(i);
+            if(isIntersect(vec[i], vec[j])){
+                g[i].push_back(j);
+                g[j].push_back(i);
             }
         }
     }
@@ -64,15 +59,15 @@ int main() {
     vi ans;
     for(int i{0}; i < n; ++i){
         if(ch[i] == 0){
-            int cnt{0};
             ch[i] = 1;
             queue<int> Q;
             Q.push(i);
+            int cnt{0};
             while(!Q.empty()){
                 int x{Q.front()};
                 Q.pop();
                 cnt++;
-                for(auto& j : graph[x]){
+                for(auto& j : g[x]){
                     if(ch[j] == 0){
                         ch[j] = 1;
                         Q.push(j);
@@ -82,8 +77,12 @@ int main() {
             ans.push_back(cnt);
         }
     }
-    sort(ans.begin(), ans.end());
+    if(ans.size() == 0){
+        cout << 0 << "\n" << 0;
+        return 0;
+    }
     cout << ans.size() << "\n";
-    cout << ans.back();
+    cout << *max_element(ans.begin(), ans.end());
 }
+	
 
