@@ -1,4 +1,4 @@
-// 2022-07-26
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -15,9 +15,11 @@
 #define MOD 1000000007
 using namespace std;
 
-vp graph[100000];
+vp g[100001];
 vi depth(100001, -1);
 vector<vi> par(100001, vi(20, -1));
+vi d(100001);
+
 int root;
 int n;
 
@@ -28,7 +30,7 @@ void bfs(){
     while(!Q.empty()){
         int x{Q.front()};
         Q.pop();
-        for(auto& i: graph[x]){
+        for(auto& i: g[x]){
             if(depth[i.first] == -1){
                 depth[i.first] = depth[x] + 1;
                 par[i.first][0] = x;
@@ -47,9 +49,9 @@ void bfs(){
 int LCA(int a, int b){
     if(depth[a] < depth[b]) swap(a, b);
     int dif = depth[a] - depth[b];
-    for(int i{0}; dif != 0; ++i){
-        if(dif % 2 == 1) a = par[a][i];
-        dif /= 2;
+    for(int i{0}; dif > 0; ++i){
+        if(dif & 1) a = par[a][i];
+        dif >>= 1;
     }
     if(a != b){
         for(int i{19}; i >=0; --i){
@@ -63,37 +65,41 @@ int LCA(int a, int b){
     return a;
 }
 
+int dist(int u, int v){
+    return d[u] + d[v] - 2 * d[LCA(u, v)];
+}
+
 int main() {
 	fastio;
     cin >> n;
-    root = 1;    
     for(int i{0}; i < n - 1; ++i){
         int a, b, c;
         cin >> a >> b >> c;
-        graph[a].push_back({b, c});
-        graph[b].push_back({a, c});
+        g[a].push_back({b, c});
+        g[b].push_back({a, c});
     }
+    root = 1;
     bfs();
-    vi dis(n + 1, -1);
-    dis[1] = 0;
     queue<int> Q;
-    Q.push(1);
+    Q.push(root);
+    d[root] = 0;
     while(!Q.empty()){
         int x{Q.front()};
         Q.pop();
-        for(auto& i : graph[x]){
-            if(dis[i.first] == -1){
-                dis[i.first] = dis[x] + i.second;
+        for(auto& i : g[x]){
+            if(i.first != par[x][0]){                
+                d[i.first] = d[x] + i.second;
                 Q.push(i.first);
             }
         }
     }
     int m;
     cin >> m;
-    while(m--){
+    for(int i{0}; i < m; ++i){
         int a, b;
         cin >> a >> b;
-        cout << dis[a] + dis[b] - 2 * dis[LCA(a, b)] << "\n";
+        cout << dist(a, b) << "\n";
     }
 }
+	
 
