@@ -1,4 +1,4 @@
-// 2022-07-29
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -15,7 +15,6 @@
 #define MOD 1000000007
 using namespace std;
 
-// 강한 연결 요소
 int id{0};
 int d[10001]{}; // id
 int sccNum; // scc 개수
@@ -75,10 +74,12 @@ int main() {
     sort(SCC.begin(), SCC.end());
     cout << SCC.size() << "\n";
     for(auto& i : SCC){
+        sort(i.begin(), i.end());
         for(auto& j : i){
             cout << j << " ";
         }
         cout << "-1\n";
     }
 }
+
 
