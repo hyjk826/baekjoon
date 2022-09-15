@@ -19,23 +19,23 @@ vi segTree(400000);
 vi vec(100000);
 int n;
 
-// void init(int node, int l, int r){
-//     if(l == r){
-//         minIndexSeg[node] = l;
-//         return;
-//     }
-//     int m = (l + r) / 2;
-//     init(node * 2, l, m);
-//     init(node * 2 + 1, m + 1, r);
-//     int a = minIndexSeg[node * 2];
-//     int b = minIndexSeg[node * 2 + 1];
-//     if(vec[a] <= vec[b]) minIndexSeg[node] = a;
-//     else minIndexSeg[node] = b;
-// }
+void init(int node, int l, int r){
+    if(l == r){
+        segTree[node] = l;
+        return;
+    }
+    int m = (l + r) / 2;
+    init(node * 2, l, m);
+    init(node * 2 + 1, m + 1, r);
+    int a = segTree[node * 2];
+    int b = segTree[node * 2 + 1];
+    if(vec[a] <= vec[b]) segTree[node] = a;
+    else segTree[node] = b;
+}
 
 // int query(int node, int l, int r, int s, int e){
 //     if (r < s || l > e) return -1;
-//     if(s <= l && r <= e) return minIndexSeg[node];
+//     if(s <= l && r <= e) return segTree[node];
 //     int m = (l + r) / 2;
 //     int a = query(node * 2, l, m, s, e);
 //     int b = query(node * 2 + 1, m + 1, r, s, e);
@@ -43,14 +43,14 @@ int n;
 //     else return b;
 // }
 
-int init(int node, int s, int e) {
-	if (s == e) return segTree[node] = s;
-	int m = (s + e) / 2;
-	int l = init(node * 2, s, m);
-	int r = init(node * 2 + 1, m + 1, e);
-	if (vec[l] <= vec[r]) return segTree[node] = l;
-	else return segTree[node] = r;
-}
+// int init(int node, int s, int e) {
+// 	if (s == e) return segTree[node] = s;
+// 	int m = (s + e) / 2;
+// 	int l = init(node * 2, s, m);
+// 	int r = init(node * 2 + 1, m + 1, e);
+// 	if (vec[l] <= vec[r]) return segTree[node] = l;
+// 	else return segTree[node] = r;
+// }
 
 int query(int node, int s, int e, int l, int r) {
 	if (r < s || l > e) return -1;
