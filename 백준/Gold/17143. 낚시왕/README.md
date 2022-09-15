@@ -1,4 +1,4 @@
-# [Gold II] 낚시왕 - 17143 
+# [Gold I] 낚시왕 - 17143 
 
 [문제 링크](https://www.acmicpc.net/problem/17143) 
 
