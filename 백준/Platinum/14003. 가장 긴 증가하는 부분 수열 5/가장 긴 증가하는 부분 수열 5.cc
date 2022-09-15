@@ -1,50 +1,58 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <string>
-#include <algorithm>
-#define pi pair<int, int>
+// 2022-09-15
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
 #define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
+#define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
+#define MOD 1000000007
 using namespace std;
 
-int xx[]{ 0,-1,0, 1 };
-int yy[]{ -1,0,1,0 };
+vi LIS(vi& vec){
+    int n = (int)vec.size();
+    vi v;
+    v.push_back(-MAX);
+    vi cnt(n);
+    for(int i{0}; i < n; ++i){
+        if(v.back() < vec[i]){
+            v.push_back(vec[i]);
+            cnt[i] = v.size() - 1;
+        }
+        else{
+            auto it = lower_bound(v.begin(), v.end(), vec[i]);
+            cnt[i] = it - v.begin();
+            *it = vec[i];
+        }
+    }
+    vi ans;
+    int idx{(int)v.size() - 1};
+    for(int i{n - 1}; i >= 0; --i){
+        if(cnt[i] == idx){
+            ans.push_back(vec[i]);
+            idx--;
+        }
+        if(idx == 0) break;
+    }
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
 
 int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	int n;
-	cin >> n;
-	vector<int> vec(n);
-	vector<int> cnt(n);
-	vector<int> v;
-	v.push_back(-MAX);
-	for (int i{ 0 }; i < n; ++i) {
-		cin >> vec[i];
-		if (v.back() < vec[i]) {
-			v.push_back(vec[i]);
-			cnt[i] = v.size() - 1;
-		}
-		else {
-			auto it = lower_bound(v.begin(), v.end(), vec[i]);
-			cnt[i] = it - v.begin();
-			*it = vec[i];
-		}
-	}
-	vector<int> ans;
-	int idx{ (int)v.size() - 1 };
-	for (int i{ n - 1 }; i >= 0; --i) {
-		if (cnt[i] == idx) {
-			ans.push_back(vec[i]);
-			idx--;
-		}
-		if (idx == 0) break;
-	}
-
-	cout << v.size() - 1 << "\n";
-	for (int i{ (int)ans.size() - 1 }; i >= 0; --i) {
-		cout << ans[i] << " ";
-	}
+	fastio;
+    int n;
+    cin >> n;
+    vi vec(n);
+    for(int i{0}; i < n; ++i) cin >> vec[i];
+    vi r = LIS(vec);
+    cout << r.size() << "\n";
+    for(auto& i : r) cout << i << " ";
 }
+	
+
