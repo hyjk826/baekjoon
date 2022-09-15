@@ -1,4 +1,4 @@
-// 2022-05-04
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -6,18 +6,21 @@
 #define vi vector<int>
 #define vl vector<long long>
 #define vc vector<char>
+#define vs vector<string>
 #define pi pair<int, int>
+#define pl pair<ll, ll>
 #define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-vi graph[100000];
+vi graph[100001];
 vi depth(100001, -1);
 vector<vi> par(100001, vi(20, -1));
+
 int root;
-int n;
+int n, m;
 
 void bfs(){
     depth[root] = 0;
@@ -45,9 +48,9 @@ void bfs(){
 int LCA(int a, int b){
     if(depth[a] < depth[b]) swap(a, b);
     int dif = depth[a] - depth[b];
-    for(int i{0}; dif != 0; ++i){
-        if(dif % 2 == 1) a = par[a][i];
-        dif /= 2;
+    for(int i{0}; dif > 0; ++i){
+        if(dif & 1) a = par[a][i];
+        dif >>= 1;
     }
     if(a != b){
         for(int i{19}; i >=0; --i){
@@ -61,8 +64,9 @@ int LCA(int a, int b){
     return a;
 }
 
-int main(){
-    fastio;
+int main() {
+	fastio;
+    root = 1;
     cin >> n;
     for(int i{0}; i < n - 1; ++i){
         int a, b;
@@ -70,9 +74,7 @@ int main(){
         graph[a].push_back(b);
         graph[b].push_back(a);
     }
-    root = 1;
     bfs();
-    int m;
     cin >> m;
     for(int i{0}; i < m; ++i){
         int a, b;
@@ -80,3 +82,5 @@ int main(){
         cout << LCA(a, b) << "\n";
     }
 }
+	
+
