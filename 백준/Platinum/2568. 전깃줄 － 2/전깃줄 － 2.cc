@@ -1,4 +1,4 @@
-// 2022-09-14
+// 2022-09-01
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -55,22 +55,24 @@ int main() {
     vp copy = vec;
     sort(copy.begin(), copy.end());
     vi A;
-    for(auto& i : copy) A.push_back(i.second);
-    vi r = LIS(A);
-    map<int, int> mp;
-    for(auto& i : r){
-        mp[i]++;
+    for(auto& i : copy){
+        A.push_back(i.second);
     }
+    set<int> st;
+    vi r = LIS(A);
+    for(int i{0}; i < (int)r.size(); ++i){
+        st.insert(r[i]);
+    }
+    cout << n - (int)r.size() << "\n";
     vi ans;
     for(int i{0}; i < n; ++i){
-        if(mp[vec[i].second] == 0){
-            ans.push_back(vec[i].first);
-        }
-        else mp[vec[i].second]--;
+        if(st.count(vec[i].second)) continue;
+        ans.push_back(vec[i].first);
     }
-    cout << ans.size() << "\n";
     sort(ans.begin(), ans.end());
-    for(auto& i : ans) cout << i << "\n";
+    for(auto& i : ans){
+        cout << i << "\n";
+    }
+
 }
-	
 
