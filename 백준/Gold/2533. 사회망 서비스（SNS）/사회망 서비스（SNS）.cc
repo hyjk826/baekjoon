@@ -17,7 +17,7 @@ using namespace std;
 
 int n;
 vi g[1000001];
-vector<vi> dp(1000001, vi(2));
+int dp[1000001][2]{};
 
 void dfs(int v, int pre){
     dp[v][1]++;
