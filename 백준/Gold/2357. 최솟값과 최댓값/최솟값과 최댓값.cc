@@ -1,4 +1,4 @@
-// 2022-09-14
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -15,46 +15,45 @@
 #define MOD 1000000007
 using namespace std;
 
-vp seg(400000);
+vp minMaxSeg(400000);
 vi vec(100000);
 
-
-void init(int node, int start, int end) {  
-    if (start == end){
-        seg[node] = {vec[start], vec[start]};
+void init(int node, int l, int r){
+    if(l == r) {
+        minMaxSeg[node] = {vec[l], vec[r]};
         return;
     }
-    int mid = (start + end) / 2;
-    init(node * 2, start, mid);
-    init(node * 2 + 1, mid + 1, end);
-    seg[node].first = max(seg[node * 2].first, seg[node * 2 + 1].first);
-    seg[node].second = min(seg[node * 2].second, seg[node * 2 + 1].second);
+    int m = (l + r) / 2;
+    init(node * 2, l, m);
+    init(node * 2 + 1, m + 1, r);
+    minMaxSeg[node].first = min(minMaxSeg[node * 2].first, minMaxSeg[node * 2 + 1].first);
+    minMaxSeg[node].second = max(minMaxSeg[node * 2].second, minMaxSeg[node * 2 + 1].second);
 }
 
-pi query(int node, int start, int end, int from, int to) {
-    if (start > to || end < from) return {-MAX, MAX};
-    if (from <= start && end <= to) return seg[node];
-    int mid = (start + end) / 2;
-    pi l = query(node * 2, start, mid, from, to);
-    pi r = query(node * 2 + 1, mid + 1, end, from, to);
-    return {max(l.first, r.first), min(l.second, r.second)};
+pi query(int node, int l, int r, int s, int e){
+    if(r < s || e < l) return {MAX, -MAX};
+    if(s <= l && r <= e) return minMaxSeg[node];
+    int m = (l + r) / 2;
+    pi left = query(node * 2, l, m, s, e);
+    pi right = query(node * 2 + 1, m + 1, r, s, e);
+    return {min(left.first, right.first), max(left.second, right.second)};
+
 }
+
 
 int main() {
 	fastio;
     int n, m;
     cin >> n >> m;
-    for(int i{0}; i < n; ++i){
-        cin >> vec[i];
-    }
+    for(int i{0}; i < n; ++i) cin >> vec[i];
     init(1, 0, n - 1);
     for(int i{0}; i < m; ++i){
-        int l, r;
-        cin >> l >> r;
-        l--;
-        r--;
-        pi ans = query(1, 0, n - 1, l, r);
-        cout << ans.second << " " << ans.first << "\n";
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        pi ans = query(1, 0, n - 1, a , b);
+        cout << ans.first << " " << ans.second << "\n";
     }
 }
 	
