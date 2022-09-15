@@ -1,4 +1,4 @@
-// 2022-09-01
+// 2022-09-15
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -67,5 +67,5 @@ int main() {
     }
     if(ans == MAX) cout << -1;
     else cout << ans;
-}
+}	
 
