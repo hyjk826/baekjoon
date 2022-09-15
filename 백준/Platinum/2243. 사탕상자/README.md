@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 5928 KB, 시간: 72 ms
+메모리: 5928 KB, 시간: 68 ms
 
 ### 분류
 
-이분 탐색(binary_search), 자료 구조(data_structures), 세그먼트 트리(segtree)
+이분 탐색(binary_search), 세그먼트 트리(segtree), 자료 구조(data_structures)
 
 ### 문제 설명
 
