@@ -1,64 +1,48 @@
-// 2022-09-12
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cstring>
 using namespace std;
 
-vector<vp> g(100001);
 int n;
+vector<pair<int, int> > vec[100001];
+int ch[100001]{};
+int r{ 0 };
+int fNode;
 
-pi bfs(int s){
-    vi dis(n + 1, -1);
-    dis[s] = 0;
-    queue<int> Q;
-    Q.push(s);
-    while(!Q.empty()){
-        int x{Q.front()};
-        Q.pop();
-        for(auto& i : g[x]){
-            if(dis[i.first] == -1){
-                dis[i.first] = dis[x] + i.second;
-                Q.push(i.first);
-            }
-        }
-    }
-    int mx{1};
-    for(int i{1}; i <= n; ++i){
-        if(dis[i] > dis[mx]){
-            mx = i;
-        }
-    }
-    return {mx, dis[mx]};
+void dfs(int s, int sum) {
+	if (sum > r) {
+		r = sum;
+		fNode = s;
+	}
+	for (int i{ 0 }; i < (int)vec[s].size(); ++i) {
+		if (ch[vec[s][i].first] == 0) {
+			ch[vec[s][i].first] = 1;
+			dfs(vec[s][i].first, sum + vec[s][i].second);
+			ch[vec[s][i].first] = 0;
+		}
+	}
 }
 
 int main() {
-	fastio;
-    cin >> n;
-    for(int i{1}; i <= n; ++i){
-        int a;
-        cin >> a;
-        while(1){
-            int b, c;
-            cin >> b;
-            if(b == -1) break;
-            cin >> c;
-            g[a].push_back({b, c});
-        }
-    }    
-    pi A = bfs(1);
-    pi B = bfs(A.first);
-    cout << B.second;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	int a, b, c;
+	for (int i{ 0 }; i < n; ++i) {
+		cin >> a;
+		while (1) {
+			cin >> b;
+			if (b == -1)
+				break;
+			cin >> c;
+			vec[a].push_back({ b,c });
+		}		
+	}
+	ch[1] = 1;
+	dfs(1, 0);
+	memset(ch, 0, sizeof(ch));
+	ch[fNode] = 1;
+	dfs(fNode, 0);
+	cout << r;
 }
-	
-
