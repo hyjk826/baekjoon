@@ -1,4 +1,4 @@
-// 2022-09-06
+// 2022-09-19
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -15,14 +15,6 @@
 #define MOD 1000000007
 using namespace std;
 
-bool ch(vector<vi>& vec){
-    for(int i{0}; i < 3; ++i){
-        for(int j{0}; j < 3; ++j){
-            if(vec[i][j] != vec[0][0]) return false;
-        }
-    }
-    return true;
-}
 
 int main() {
 	fastio;
@@ -34,51 +26,54 @@ int main() {
             for(int j{0}; j < 3; ++j){
                 char c;
                 cin >> c;
-                if(c == 'H') board[i][j] = 0;
-                else board[i][j] = 1;
+                if(c == 'T') board[i][j] = 1;
             }
         }
         int ans{MAX};
-        for(int i{0}; i < (1 << 3); ++i){
-            for(int j{0}; j < (1 << 3); ++j){
-                vi A(3), B(3);            
-                int cnt1{0}, cnt2{0};
-                for(int k{0}; k < 3; ++k){
-                    if((i >> k) & 1) A[k]++;
-                }
-                for(int k{0}; k < 3; ++k){
-                    if((j >> k) & 1) B[k]++;
-                }
-                vector<vi> copy = board;
-                for(int i{0}; i < 3; ++i){
-                    for(int j{0}; j < 3; ++j){
-                        int a = A[i] + B[j];
-                        if(a & 1){
-                            copy[i][j] ^= 1;    
+        for(int i{0}; i < (1 << 8); ++i){
+            vector<vi> copy;
+            copy = board;
+            int cnt = __builtin_popcount(i);
+            for(int j{0}; j < 8; ++j){
+                if((i >> j) & 1){
+                    if(j < 3){
+                        for(int k{0}; k < 3; ++k){
+                            copy[j][k] ^= 1;
+                        }
+                    }
+                    else if(j < 6){
+                        for(int k{0}; k < 3; ++k){
+                            copy[k][j - 3] ^= 1;
+                        }
+                    }
+                    else{
+                        if(j == 6){
+                            for(int k{0}; k < 3; ++k){
+                                copy[k][k] ^= 1;
+                            }
+                        }
+                        else{
+                            for(int k{0}; k < 3; ++k){
+                                copy[k][2 - k] ^= 1;
+                            }
                         }
                     }
                 }
-                cnt1 = A[0] + A[1] + A[2];
-                cnt2 = B[0] + B[1] + B[2];
-                if(ch(copy)) ans = min(ans, cnt1 + cnt2);
-                for(int i{0}; i < 3; ++i){
-                    copy[i][i] ^= 1;
-                }
-                if(ch(copy)) ans = min(ans, cnt1 + cnt2 + 1);
-                for(int i{0}; i < 3; ++i){
-                    copy[i][2 - i] ^= 1;
-                }
-                if(ch(copy)) ans = min(ans, cnt1 + cnt2 + 2);
-                for(int i{0}; i < 3; ++i){
-                    copy[i][i] ^= 1;
-                }
-                if(ch(copy)) ans = min(ans, cnt1 + cnt2 + 1);
             }
+            bool flag = true;
+            for(int j{0}; j < 3; ++j){
+                for(int k{0}; k < 3; ++k){
+                    if(copy[j][k] != copy[0][0]){
+                        flag = false;
+                    }
+                }
+            }
+            if(flag) ans = min(ans, cnt);
         }
-        if(ans == MAX) cout << -1;
-        else cout << ans;
-        cout << "\n";
+        if(ans == MAX) cout << -1 << "\n";
+        else cout << ans << "\n";
     }
+
 }
 	
 
