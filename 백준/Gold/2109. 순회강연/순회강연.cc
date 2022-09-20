@@ -1,4 +1,4 @@
-// 2022-09-19
+// 2022-09-20
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -23,14 +23,14 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> vec[i].second >> vec[i].first;
     }
+    ll ans{0};
     sort(vec.begin(), vec.end());
-    int idx{n - 1};
+    int k{n - 1};
     priority_queue<int> pQ;
-    int ans{0};
     for(int i{10000}; i >= 1; --i){
-        while(idx >= 0 && vec[idx].first >= i){
-            pQ.push(vec[idx].second);
-            idx--;
+        while(k >= 0 && vec[k].first >= i){
+            pQ.push(vec[k].second);
+            k--;
         }
         if(!pQ.empty()){
             ans += pQ.top();
