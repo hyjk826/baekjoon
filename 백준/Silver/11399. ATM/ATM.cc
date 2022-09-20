@@ -1,29 +1,23 @@
-// 2022-09-10
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define vp vector<pi>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <queue>
 using namespace std;
 
-int main(){
-    fastio;
-    int n;
-    cin >> n;
-    int ans{0};
-    vi vec(n);
-    for(int i{0}; i < n; ++i) cin >> vec[i];
-    sort(vec.begin(), vec.end());
-    for(int i{0}; i < n; ++i){
-        ans += vec[i] * (n - i);
-    }
-    cout << ans;
+int main() {
+	int n;
+	cin >> n;
+	vector<int> vec;
+	for (int i{ 0 }; i < n; ++i) {
+		int a;
+		cin >> a;
+		vec.push_back(a);
+	}
+	sort(vec.begin(), vec.end());
+	int sum{ 0 };
+	for (int i{ 0 }; i < n; ++i) {
+		sum += vec[i] * (n - i);
+	}
+	cout << sum;
 }
