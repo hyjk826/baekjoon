@@ -35,17 +35,12 @@ int main() {
     else{
         while(1){
             vi vec;
-            int idx{0};
-            for(auto j{prev(ms.end())};; j = prev(j)){
-                if(A[idx] >= *j){
-                    vec.push_back(*j);
-                    idx++;
-                }
-                if(idx == n || j == ms.begin()) break;
-            }
-            for(auto& i : vec){
-                auto it = ms.find(i);
+            for(int i{0}; i < n; ++i){
+                auto it = ms.upper_bound(A[i]);
+                if(it == ms.begin()) break;
+                it--;
                 ms.erase(it);
+                if(ms.empty()) break;
             }
             ans++;
             if(ms.empty()) break;
