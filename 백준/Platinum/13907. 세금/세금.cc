@@ -46,6 +46,7 @@ int main() {
     dijk[s][0] = 0;
     priority_queue<st> pQ;
     pQ.push({s, 0, 0});
+    vi ch(n + 1, MAX);
     while(!pQ.empty()){
         int v{pQ.top().v};
         int w{pQ.top().w};
@@ -53,6 +54,8 @@ int main() {
         pQ.pop();
         if(dijk[v][cnt] < w) continue;
         if(cnt == n) continue;
+        if(ch[v] < cnt) continue;
+        ch[v] = cnt;
         for(auto& i : g[v]){
             int nv{i.first};
             int nw{i.second + w};
