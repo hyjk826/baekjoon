@@ -39,11 +39,11 @@ int main() {
     cin >> x >> z;
     int p;
     cin >> p;
-    set<int> s;
+    vi ch(n + 1);
     for(int i{0}; i < p; ++i){
         int a;
         cin >> a;
-        s.insert(a);
+        ch[a] = 1;
     }
     priority_queue<st> pQ;
     vector<vl> dijk(n + 1, vl(2, LLONG_MAX));
@@ -58,7 +58,7 @@ int main() {
         for(auto& i : g[v]){
             int nv{i.first};
             ll nw{w + i.second};
-            int nflag = (flag | (s.count(nv)));
+            int nflag = (flag | (ch[nv]));
             if(dijk[nv][nflag] > nw){
                 dijk[nv][nflag] = nw;
                 pQ.push({nv, nflag, nw});
