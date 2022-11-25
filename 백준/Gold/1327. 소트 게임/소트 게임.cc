@@ -20,30 +20,34 @@ int main() {
 	fastio;	
     int n, k;
     cin >> n >> k;
-    vi vec(n);
+    string str;
     for(int i{0}; i < n; ++i){
-        cin >> vec[i];
+        int a;
+        cin >> a;
+        str += char('0' + a);
     }
-    queue<vi> Q;
-    Q.push(vec);
-    map<vi, int> mp;
-    mp[vec] = 0;
+    queue<string> Q;
+    Q.push(str);
+    map<string, int> mp;
+    mp[str] = 0;
     while(!Q.empty()){
-        vi v =Q.front();
-        int a= mp[v];
+        string s = Q.front();
+        int a = mp[s];
         Q.pop();
-        for(int i{0}; i + k - 1 < n; ++i){
-            reverse(v.begin() + i, v.begin() + i + k);
-            if(!mp.count(v)) {
-                mp[v] = a + 1;
-                Q.push(v);
-            }
-            reverse(v.begin() + i, v.begin() + i + k);
+        for(int i{0}; i + k <= n; ++i){
+            reverse(s.begin() + i, s.begin() + i + k);
+            if(mp.count(s) == 0){
+                mp[s] = a + 1;
+                Q.push(s);
+            }            
+            reverse(s.begin() + i, s.begin() + i + k);
         }
     }
-    vi A;
-    for(int i{1}; i <= n; ++i) A.push_back(i);
-    if(mp.count(A)) cout << mp[A];
-    else cout << -1;
+    string t;
+    for(int i{1}; i <= n; ++i){
+        t += char('0' + i);
+    }
+    if(mp.count(t)) cout << mp[t];
+    else  cout << -1;
 }
 	
