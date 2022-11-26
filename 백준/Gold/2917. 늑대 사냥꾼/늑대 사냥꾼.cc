@@ -74,7 +74,7 @@ int main() {
         int y{pQ.top().y};
         int w{pQ.top().w};
         pQ.pop();
-        if(B[x][y] < w) continue;
+        if(B[x][y] > w) continue;
         for(int dir{0}; dir < 4; ++dir){
             int nx{x + xx[dir]};
             int ny{y + yy[dir]};
