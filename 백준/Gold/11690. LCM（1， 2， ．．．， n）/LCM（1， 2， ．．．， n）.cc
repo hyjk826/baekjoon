@@ -16,15 +16,15 @@
 #define MOD 1000000007
 using namespace std;
 
-vc ch((int)1e8 + 1, '0');
+vector<bool> ch((int)1e8 + 1);
 
 
 int main() {
 	fastio;
 	for(ll i{2}; i <= (int)1e8; ++i){
-        if(ch[i] == '0'){
+        if(ch[i] == 0){
             for(ll j{i * i}; j <= (int)1e8; j += i){
-                ch[j] = '1';
+                ch[j] = 1;
             }
         }
     }
@@ -32,7 +32,7 @@ int main() {
     ll n;
     cin >> n;
     for(int i{2}; i <= n; ++i){
-        if(ch[i] == '1') continue;
+        if(ch[i] == 1) continue;
         ll k{1};
         while(k * i<= n){
             k *= i;
