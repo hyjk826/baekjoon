@@ -17,17 +17,16 @@
 using namespace std;
 
 map<int, int> mp;
-set<int> st;
 int n, m, k;
 
 int getKey(int a){
     if(mp.count(a)) return a;
-    auto r = st.upper_bound(a);
-    auto l = st.lower_bound(a);
+    auto r = mp.upper_bound(a);
+    auto l = mp.lower_bound(a);
     int x = -1;
     int y = -1;
-    if(r != st.end() && abs(a - *r) <= k) x = *r;
-    if(l != st.begin() && abs(a - *prev(l)) <= k) y = *prev(l);
+    if(r != mp.end() && abs(a - r->first) <= k) x = r->first;
+    if(l != mp.begin() && abs(a - prev(l)->first) <= k) y = prev(l)->first;
     if(x == -1 && y == -1) return -1;
     if(x == -1) return y;
     if(y == -1) return x;
@@ -44,7 +43,6 @@ int main() {
         int a, b;
         cin >> a >> b;
         mp[a] = b;
-        st.insert(a);
     }
     for(int i{0}; i < m; ++i){
         int a, b, c;
@@ -52,7 +50,6 @@ int main() {
         if(a == 1){
             cin >> b >> c;
             mp[b] = c;
-            st.insert(b);
         }
         else if(a == 2){
             cin >> b >> c;
