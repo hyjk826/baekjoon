@@ -30,7 +30,7 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> vec[i].first >> vec[i].second;
     }
-    vpl ans;
+    pl ans;
     ll mx{0};
     for(int i{0}; i < n; ++i){
         for(int j{i + 1}; j < n; ++j){
@@ -44,17 +44,12 @@ int main() {
                 a += ((max(vec[i].first, vec[j].first) - 1) / lcm) + 1;      
             }
             if(a > mx){
-                ans.clear();
-                ans.push_back({i + 1, j + 1});
+                ans = {i + 1, j + 1};
                 mx = a;
-            }
-            else if(a == mx){
-                ans.push_back({i + 1, j + 1});
             }
         }
     }
-    sort(ans.begin(), ans.end());
-    cout << ans[0].first << " " << ans[0].second << "\n";
+    cout << ans.first << " " << ans.second << "\n";
     cout << mx;
 }
 	
