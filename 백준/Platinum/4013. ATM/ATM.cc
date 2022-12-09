@@ -51,13 +51,25 @@ int dfs(int c) {
 	return result;
 }
 
-struct st{
-    int v; ll w;
-    bool operator< (const st a) const{
-        return w < a.w;
-    }
-};
+int S, p;
+vector<vi> g2;
+vl B;
+vl dp;
 
+ll f(int a){
+    if(dp[a] != -1) return dp[a];
+    if(a == sn[S]) return dp[a] = B[a];
+    if(g2[a].size() == 0){
+        return dp[a] = -LLONG_MAX;
+    }
+    dp[a] = B[a];
+    ll mx{-LLONG_MAX};
+    for(auto& i : g2[a]){
+        mx = max(mx, f(i));
+    }
+    dp[a] += mx;
+    return dp[a];
+}
 
 int main() {
 	fastio;
@@ -75,46 +87,25 @@ int main() {
     for(int i{1}; i <= n; ++i){
         if(d[i] == 0) dfs(i);
     }
-    vector<vi> g2(sccNum);
-    vl B(sccNum);
+    g2.resize(sccNum);
+    B.resize(sccNum);
+    dp.resize(sccNum, -1);
     for(int i{1}; i <= n; ++i){
         B[sn[i]] += A[i];
     }   
     for(int i{1}; i <= n; ++i){
         for(auto& j : g[i]){
             if(sn[i] != sn[j]){
-                g2[sn[i]].push_back(sn[j]);
+                g2[sn[j]].push_back(sn[i]);
             }
         }
     }
-    int S, p;
     cin >> S >> p;
-    vi ch(sccNum);
-    for(int i{0}; i < p; ++i){
-        int a;
-        cin >> a;
-        ch[sn[a]] = 1;
-    }
+    vi P(p);
+    for(int i{0}; i < p; ++i) cin >> P[i];
     ll ans{0};
-    priority_queue<st> pQ;
-    pQ.push({sn[S], B[sn[S]]});
-    vl dijk(sccNum, -LLONG_MAX);
-    dijk[sn[S]] = B[sn[S]];
-    while(!pQ.empty()){
-        int v{pQ.top().v};
-        ll w{pQ.top().w};
-        pQ.pop();
-        if(dijk[v] > w) continue;
-        for(auto& i : g2[v]){
-            if(dijk[i] < w + B[i]){
-                dijk[i] = w + B[i];
-                pQ.push({i, w + B[i]});
-            }
-        }
-    }
-    for(int i{0}; i < sccNum; ++i){
-        if(ch[i] == 0) continue;
-        ans = max(ans, dijk[i]);
+    for(int i{0}; i < p; ++i){
+        ans = max(ans, f(sn[P[i]]));
     }
     cout << ans;
 }
