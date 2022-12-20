@@ -44,20 +44,19 @@ int main(){
 	fastio;
 	int n, m, k;
     cin >> n >> m >> k;
-    set<pi> s;
     for(int i{1}; i <= n; ++i){
         cin >> p[i];
         uni[i] = i;
     }
     vi A(m);
+    vi ch(n + 1);
     map<pi, int> mp;
     for(int i{0}; i < m; ++i){
         cin >> A[i];
-        s.insert({min(A[i], p[A[i]]), max(A[i], p[A[i]])});
-        mp[{min(A[i], p[A[i]]), max(A[i], p[A[i]])}]++;
+        ch[A[i]]++;
     }
     for(int i{1}; i <= n; ++i){
-        if(s.count({min(i, p[i]), max(i, p[i])})) continue;
+        if(ch[i]) continue;
         if(p[i] == -1) continue;
         Union(i, p[i]);
     }
@@ -81,12 +80,8 @@ int main(){
         }
         if(i){
             if(p[A[i - 1]] == -1) continue;
-            int a = min(A[i - 1], p[A[i - 1]]);
-            int b = max(A[i - 1], p[A[i - 1]]);
-            mp[{a, b}]--;
-            if(mp[{a, b}] == 0){
-                Union(A[i - 1], p[A[i - 1]]);
-            }
+            ch[A[i - 1]]--;
+            if(ch[A[i - 1]] == 0) Union(A[i - 1], p[A[i - 1]]);
         }
     }
     for(auto& i : ans){
