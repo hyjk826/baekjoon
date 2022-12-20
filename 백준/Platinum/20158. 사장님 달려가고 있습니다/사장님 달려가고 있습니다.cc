@@ -20,7 +20,7 @@ struct st{
     int x, y, v, d;
 };
 
-int dp[100][100][101][4];
+int dp[100][100][16][4];
 
 int main(){
 	fastio;
