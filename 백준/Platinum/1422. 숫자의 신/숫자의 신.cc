@@ -33,27 +33,12 @@ int main(){
         A.push_back(to_string(vec.front()));
     }
     sort(A.begin(), A.end(), [&](string a, string b){
-        for(int i{0}; i < (int)min(a.size(), b.size()); ++i){
-            if(a[i] == b[i]) continue;
-            return a[i] > b[i];
-        };
-        if((int)a.size() < (int)b.size()) return true;
-        return false;
+        string s = a;
+        string t = b;
+        s += b;
+        t += a;
+        return s > t;
     });
-    while(1){
-        int cnt{0};
-        for(int i{0}; i < (int)A.size() - 1; ++i){
-            string s = A[i];
-            s += A[i + 1];
-            string t = A[i + 1];
-            t += A[i];
-            if(s < t){
-                swap(A[i], A[i + 1]);
-                cnt++;
-            }
-        }
-        if(cnt == 0) break;
-    }
     string ans;
     for(auto& i : A){
         ans += i;
