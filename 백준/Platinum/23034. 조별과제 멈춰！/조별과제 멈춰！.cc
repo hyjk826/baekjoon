@@ -37,9 +37,91 @@ struct st{
     int a, b, w;
 };
 
+vp g[1001];
+vi depth(1001, -1);
+vector<vi> par(1001, vi(20, -1));
+vector<vi> mn(1001, vi(20));
+vector<vi> mx(1001, vi(20));
+int root;
+int n;
+
+void bfs()
+{
+    depth[root] = 0;
+    queue<int> Q;
+    Q.push(root);
+    while (!Q.empty())
+    {
+        int x{Q.front()};
+        Q.pop();
+        for (auto& i : g[x])
+        {
+            if (depth[i.first] == -1)
+            {
+                depth[i.first] = depth[x] + 1;
+                par[i.first][0] = x;
+                mn[i.first][0] = i.second;
+                mx[i.first][0] = i.second;
+                Q.push(i.first);
+            }
+        }
+    }
+    for (int i{1}; i < 20; ++i)
+    {
+        for (int j{1}; j <= n; ++j)
+        {
+            if (par[j][i - 1] == -1)
+                continue;
+            par[j][i] = par[par[j][i - 1]][i - 1];
+            mn[j][i] = min(mn[par[j][i - 1]][i - 1], mn[j][i - 1]);
+            mx[j][i] = max(mx[par[j][i - 1]][i - 1], mx[j][i - 1]);
+        }
+    }
+}
+
+pi maxMinRoad(int a, int b)
+{
+    pi r = {MAX, 0};
+    if (depth[a] < depth[b])
+        swap(a, b);
+    int dif = depth[a] - depth[b];
+    for (int i{0}; dif > 0; ++i)
+    {
+        if (dif & 1)
+        {
+            r.first = min(r.first, mn[a][i]);
+            r.second = max(r.second, mx[a][i]);
+            a = par[a][i];
+        }
+        dif >>= 1;
+    }
+    if (a != b)
+    {
+        for (int i{19}; i >= 0; --i)
+        {
+            if (par[a][i] != -1 && par[a][i] != par[b][i])
+            {
+                r.first = min(r.first, mn[a][i]);
+                r.first = min(r.first, mn[b][i]);
+                r.second = max(r.second, mx[a][i]);
+                r.second = max(r.second, mx[b][i]);
+                a = par[a][i];
+                b = par[b][i];
+            }
+        }
+        r.first = min(r.first, mn[a][0]);
+        r.first = min(r.first, mn[b][0]);
+        r.second = max(r.second, mx[a][0]);
+        r.second = max(r.second, mx[b][0]);
+    }
+    return r;
+}
+
+// 1 - 2 - 3 - 4
+
 int main(){
 	fastio;
-    int n, m;
+    int m;
     cin >> n >> m;
     vector<st> edge(m);
     for(int i{0}; i < m; ++i){
@@ -50,7 +132,6 @@ int main(){
     });
     int q;
     cin >> q;
-    vector<vp> g(n + 1);
     int sum{0};
     for(int i{1}; i <= n; ++i){
         uni[i] = i;
@@ -62,30 +143,12 @@ int main(){
             sum += edge[i].w;
         }
     }
+    root = 1;
+    bfs();
     while(q--){
         int a, b;
         cin >> a >> b;
-        vp p(n + 1);
-        queue<int> Q;
-        Q.push(a);
-        while(!Q.empty()){
-            int v{Q.front()};
-            Q.pop();
-            for(auto& i : g[v]){
-                if(p[i.first].first == 0){
-                    p[i.first] = {v, i.second};
-                    Q.push(i.first);
-                }
-            }
-        }
-        int k = b;
-        int mx{0};
-        while(1){
-            mx = max(mx, p[k].second);
-            k = p[k].first;
-            if(k == a) break;
-        }
-        cout << sum - mx << "\n";
+        cout << sum - maxMinRoad(a, b).second << "\n";
     }
 }
 	
