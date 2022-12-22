@@ -16,27 +16,28 @@
 #define MOD 1000000007
 using namespace std;
 
-vi minSeg(2000010, MAX);
-
-void update(int node, int l, int r, int idx, int value){
-    if(l > idx || r < idx) return;
-    if(l == r){
-        minSeg[node] = value;
+template <typename T>
+struct binary_indexed_tree{
+  int N;
+  vector<T> BIT;
+  binary_indexed_tree(int N): N(N), BIT(N + 1, MAX){
+  }
+  void add(int i, T x){
+    i++;
+    while (i <= N){
+      BIT[i] = min(BIT[i], x);
+      i += i & -i;
     }
-    else{
-        int m = (l + r) / 2;
-        update(node * 2, l, m, idx, value);
-        update(node * 2 + 1, m + 1, r, idx, value);
-        minSeg[node] = min(minSeg[node * 2], minSeg[node * 2 + 1]);
+  }
+  T query(int i){
+    T ans = MAX;
+    while (i > 0){
+      ans = min(ans, BIT[i]);
+      i -= i & -i;
     }
-}
-
-int query(int node, int l, int r, int s, int e){
-    if (r < s || e < l) return MAX;
-    if (s <= l && r <= e) return minSeg[node];
-    int m = (l + r) / 2;
-    return min(query(node * 2, l, m, s, e), query(node * 2 + 1, m + 1, r, s, e));
-}
+    return ans;
+  }
+};
 
 struct st{
     int a, b, c;
@@ -65,10 +66,11 @@ int main(){
         vec[a].c = i;
     }
     sort(vec.begin() + 1, vec.end());
+    binary_indexed_tree<int> BIT(n + 10);
     int ans{0};
     for(int i{1}; i <= n; ++i){
-        if(query(1, 1, n, 1, vec[i].b) > vec[i].c) ans++;
-        update(1, 1, n, vec[i].b, vec[i].c);
+        if(BIT.query(vec[i].b + 1) > vec[i].c) ans++;
+        BIT.add(vec[i].b, vec[i].c);
     }
     cout << ans;
 }
