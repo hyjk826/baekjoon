@@ -20,21 +20,23 @@ struct st{
     int l, r, mid, all;
 };
 
-vector<st> seg(400010, {-MAX, -MAX, -MAX, 0});
+vector<st> seg(400010);
 vi vec(100010);
 
-st init(int node, int l, int r){
+void init(int node, int l, int r){
     if(l == r){
-        return seg[node] = {vec[l], vec[l], vec[l], vec[l]};
+        seg[node] = {vec[l], vec[l], vec[l], vec[l]};
+        return;
     }
     int m = (l + r) / 2;
-    st left = init(node * 2, l, m);
-    st right = init(node * 2 + 1, m + 1, r);
+    init(node * 2, l, m);
+    init(node * 2 + 1, m + 1, r);
+    st& left = seg[node * 2];
+    st& right = seg[node * 2 + 1];
     seg[node].l = max(left.l, left.all + right.l);
     seg[node].r = max(right.r, left.r + right.all);
     seg[node].mid = max(max(left.mid, right.mid), left.r + right.l);
     seg[node].all = left.all + right.all;
-    return seg[node];
 }
 
 
