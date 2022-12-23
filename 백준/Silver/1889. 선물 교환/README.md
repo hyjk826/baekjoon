@@ -1,4 +1,4 @@
-# [Silver III] 선물 교환 - 1889 
+# [Silver I] 선물 교환 - 1889 
 
 [문제 링크](https://www.acmicpc.net/problem/1889) 
 
@@ -8,7 +8,7 @@
 
 ### 분류
 
-브루트포스 알고리즘(bruteforcing)
+브루트포스 알고리즘(bruteforcing), 자료 구조(data_structures), 그래프 이론(graphs), 우선순위 큐(priority_queue), 위상 정렬(topological_sorting)
 
 ### 문제 설명
 
