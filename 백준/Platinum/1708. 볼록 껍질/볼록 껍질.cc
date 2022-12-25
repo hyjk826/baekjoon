@@ -17,22 +17,59 @@
 using namespace std;
 
 struct point{
-    ll x, y, p, q;
-    point(int x1 = 0, int y1 = 0) : x(x1), y(y1), p(1), q(0){}    
+    int x, y;
+    bool operator< (const point& a) const{
+        if(y == a.y) return x < a.x;
+        return y < a.y;
+    }
 };
 
-bool comp(const point& A, const point& B){
-    if(A.q * B.p != A.p * B.q) {
-        return A.q * B.p < A.p * B.q;
-    }
-    if(A.y == B.y) return A.x < B.x;
-    else return A.y < B.y;
+int ccw(point A, point B, point C){
+    ll ret = 1LL * A.x * B.y + 1LL * B.x * C.y + 1LL * C.x * A.y;
+    ret -= 1LL * B.x * A.y + C.x * B.y + A.x * C.y;
+    if(ret > 0) return 1;
+    else if(ret < 0) return -1;
+    else return 0;
 }
 
+// AB, CD 
+int check(const point& A, const point& B, const point& C, const point& D){
+    return ccw({0, 0}, {B.x - A.x, B.y - A.y}, {D.x - C.x, D.y - C.y});
+}
 
+ll dist(point& A, point& B){
+    ll x = A.x - B.x;
+    ll y = A.y - B.y;
+    return x * x + y * y;
+}
 
-ll ccw(const point& A, const point& B, const point& C){
-    return A.x * B.y + B.x * C.y + C.x * A.y - B.x * A.y - C.x * B.y - A.x * C.y;
+vector<point> convex(vector<point>& vec){
+    swap(vec[0], *min_element(vec.begin(), vec.end()));
+    sort(vec.begin() + 1, vec.end(), [&](point& A, point& B){
+        int k = ccw(vec[0], A, B);
+        if(k == 0) return dist(vec[0], A) < dist(vec[0], B);
+        else return k > 0;
+    });
+    vector<point> hull;
+    for(auto& i : vec){
+        while(hull.size() >= 2 && ccw(hull[hull.size() - 2], hull.back(), i) <= 0){
+            hull.pop_back();
+        }
+        hull.push_back(i);
+    }
+    return hull;
+}
+
+double rotatingCalipers(vector<point>& vec){
+    auto hull = convex(vec);
+    ll mx{0};
+    for(int i{0}, j{0}; i < (int)hull.size(); ++i){
+        while(j + 1 < (int)hull.size() && check(hull[i], hull[i + 1], hull[j], hull[j + 1])){
+            mx = max(mx, dist(hull[i], hull[j]));
+        }
+        mx = max(mx, dist(hull[i], hull[j]));
+    }
+    return sqrt(mx);
 }
 
 int main() {
@@ -43,29 +80,6 @@ int main() {
     for(int i{0}; i < n; ++i){
         cin >> vec[i].x >> vec[i].y;
     }
-    sort(vec.begin(), vec.end(), comp);
-    for(int i{1}; i < n; ++i){
-        vec[i].p = vec[i].x - vec[0].x;
-        vec[i].q = vec[i].y - vec[0].y;
-    }
-    sort(vec.begin() + 1, vec.end(), comp);
-    stack<int> st;
-    st.push(0);
-    st.push(1);
-    int k = 2;
-    while(k < n){
-        while(st.size() >= 2){
-            int first, second;
-            second = st.top();
-            st.pop();
-            first = st.top();
-            if(ccw(vec[first], vec[second], vec[k]) > 0){
-                st.push(second);
-                break;
-            }
-        }
-        st.push(k++);
-    }
-    cout << st.size();
+    cout << convex(vec).size();
 }
 	
