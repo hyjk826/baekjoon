@@ -34,7 +34,7 @@ int ccw(point A, point B, point C){
 
 // AB, CD 
 int check(const point& A, const point& B, const point& C, const point& D){
-    return ccw({0, 0}, {B.x - A.x, B.y - A.y}, {D.x - C.x, D.y - C.y});
+    return (ccw({0, 0}, {B.x - A.x, B.y - A.y}, {D.x - C.x, D.y - C.y}) >= 0);
 }
 
 ll dist(point& A, point& B){
@@ -82,13 +82,6 @@ int main() {
         cin >> vec[i].x >> vec[i].y;
     }
     cout << fixed << setprecision(20);
-    auto hull = convex(vec);
-    ll mx{0};
-    for(int i{0}; i < (int)hull.size(); ++i){
-        for(int j{i + 1}; j < (int)hull.size(); ++j){
-            mx = max(mx, dist(hull[i], hull[j]));
-        }
-    }
-    cout << sqrt(mx);
+    cout << rotatingCalipers(vec);
 }
 	
