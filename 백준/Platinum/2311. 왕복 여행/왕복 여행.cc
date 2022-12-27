@@ -1,87 +1,138 @@
-// 2022-12-27
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
-#define vpl vector<pl>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <cstdio>
+
+#include <queue>
+
+#include <algorithm>
+
+#include <vector>
+
+#include <cstring>
+
 using namespace std;
 
-#define MX 2005
-vector<vi> g(MX);
-int capacity[MX][MX];
-int flow[MX][MX];
-int d[MX][MX];
-int source = 0;
-int sink = MX - 1;
+#define MAX 2006
 
-void addEdge(int a, int b, int c, int dist){
-    g[a].push_back(b);
-    g[b].push_back(a);
-    capacity[a][b] += c;
-    d[a][b] += dist;
-    d[b][a] -= dist;
+int N, M;
+
+vector<int> adj[MAX];
+
+int C[MAX][MAX], f[MAX][MAX], d[MAX][MAX];
+
+bool inQ[MAX];
+
+int par[MAX];
+
+int dist[MAX];
+
+int src, sink;
+
+void add_edge(int u, int v, int c, int dd) {
+
+    adj[u].push_back(v);
+
+    adj[v].push_back(u);
+
+    C[u][v] = c;
+
+    d[u][v] = dd;
+
+    d[v][u] = -dd;
+
 }
 
-ll MCMF(){
-	ll ret = 0;
-	int inq[2020]; memset(inq, 0, sizeof inq);
-	int par[2020]; memset(par, -1, sizeof par);
-	int dst[2020]; memset(dst, 0x3f, sizeof dst);
-	queue<int> q;
-	q.push(source); inq[source] = 1; dst[source] = 0;
-	while(q.size()){
-		int now = q.front(); q.pop(); inq[now] = 0;
-		for(auto nxt : g[now]){
-			if(capacity[now][nxt] - flow[now][nxt] > 0 && dst[nxt] > dst[now] + d[now][nxt]){
-				par[nxt] = now;
-				dst[nxt] = dst[now] + d[now][nxt];
-				if(!inq[nxt]){
-					q.push(nxt); inq[nxt] = 1;
-				}
-			}
-		}
-	}
-	for(int i=sink; i!=source; i=par[i]){
-		ret += d[par[i]][i];
-		flow[par[i]][i]++;
-		flow[i][par[i]]--;
-	}
-	return ret;
-}
-	
-int in(int a){
-    return (a << 1);
-}
+int mcmf() {
 
-int out(int a){
-    return (a << 1) | 1;
-}
+    int ret = 0;
+
+    while (1) {
+
+        memset(inQ, false, sizeof inQ);
+
+        memset(par, -1, sizeof par);
+
+        memset(dist, 0x3f, sizeof dist);
+
+        queue<int> q;
 
 
-int main(){
-	fastio;
-    int n, m;
-    cin >> n >> m;
-    source = out(1);
-    sink = in(n);
-    for(int i{0}; i < m; ++i){
-        int a, b, c;
-        cin >> a >> b >> c;
-        addEdge(out(a), in(b), 1, c);
-        addEdge(out(b), in(a), 1, c);
+        inQ[src] = true;
+
+        dist[src] = 0;
+
+        q.push(src);
+
+        while (!q.empty()) {
+
+            int here = q.front();
+
+            q.pop();
+
+            inQ[here] = false;
+
+            for (int next : adj[here]) {
+
+                if (C[here][next] - f[here][next] > 0 && dist[next] > dist[here] + d[here][next]) {
+
+                    dist[next] = dist[here] + d[here][next];
+
+                    par[next] = here;
+
+                    if (!inQ[next]) {
+
+                        inQ[next] = true;
+
+                        q.push(next);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (par[sink] == -1) break;
+
+        int flow = 0x3f3f3f3f;
+
+        for (int i = sink;i != src;i = par[i])
+
+            flow = min(flow, C[par[i]][i] - f[par[i]][i]);
+
+        for (int i = sink;i != src;i = par[i])
+
+            f[par[i]][i] += flow, f[i][par[i]] -= flow, ret += (flow*d[par[i]][i]);
+
     }
-    for(int i{1}; i <= n; ++i){
-        addEdge(in(i), out(i), MAX, 0);
+
+    return ret;
+
+}
+
+int main() {
+
+    scanf("%d%d", &N, &M);
+
+    src = 0, sink = 2 * N - 1;
+
+    for (int n = 1;n <= N;n++)
+
+        add_edge(2 * n - 2, 2 * n - 1, 2, 0);
+
+    for (int m = 0;m < M;m++) { 
+
+        int u, v, dd;
+
+        scanf("%d%d%d", &u, &v, &dd);
+
+        add_edge(2 * u - 1, 2 * v - 2, 1, dd);
+
+        add_edge(2 * v - 1, 2 * u - 2, 1, dd);
+
     }
-    cout << MCMF() + MCMF();
+
+    printf("%d\n", mcmf());
+
+    return 0;    
+
 }
