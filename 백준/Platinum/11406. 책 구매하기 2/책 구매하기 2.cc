@@ -16,61 +16,65 @@
 #define MOD 1000000007
 using namespace std;
 
-#define MX 205
-vector<vi> g(MX);
-int capacity[MX][MX];
-int flow[MX][MX];
-int d[MX][MX];
+vi g[305];
+int capacity[305][305]{};
+int flow[305][305]{};
+int level[305];
+int work[305];
 int source = 0;
-int sink = MX - 1;
+int sink = 301;
 
-void addEdge(int a, int b, int c, int dist){
+void addEdge(int a, int b, int c){
     g[a].push_back(b);
     g[b].push_back(a);
     capacity[a][b] += c;
-    d[a][b] += dist;
-    d[b][a] -= dist;
 }
 
-pi MCMF(){
-    int cost{0};
-    int f{0};
-    while(1){
-        vi p(MX, -1);
-        vi dist(MX, MAX);
-        vi ch(MX);
-        dist[source] = 0;
-        ch[source] = 1;
-        queue<int> Q;
-        Q.push(source);
-        while(!Q.empty()){
-            int x{Q.front()};
-            Q.pop();
-            ch[x] = 0;
-            for(auto& i : g[x]){
-                if(capacity[x][i] - flow[x][i] > 0 && dist[i] > dist[x] + d[x][i]){
-                    dist[i] = dist[x] + d[x][i];
-                    p[i] = x;
-                    if(!ch[i]){
-                        Q.push(i);
-                        ch[i] = 1;
-                    }
-                }
+bool bfs(){
+    memset(level, -1, sizeof(level));
+    queue<int> Q;
+    level[source] = 0;
+    Q.push(source);
+    while(!Q.empty()){
+        int x{Q.front()};
+        Q.pop();
+        for(auto& i : g[x]){
+            if(level[i] == -1 && capacity[x][i] - flow[x][i] > 0){
+                level[i] = level[x] + 1;
+                Q.push(i);
             }
         }
-        if(p[sink] == -1) break;
-        int ff = MAX;
-        for(int i{sink}; i != source; i = p[i]){
-            ff = min(ff, capacity[p[i]][i] - flow[p[i]][i]);
-        }
-        for(int i{sink}; i != source; i = p[i]){
-            cost += ff * d[p[i]][i];
-            flow[p[i]][i] += ff;
-            flow[i][p[i]] -= ff;
-        }
-        f += ff;
     }
-    return {f, cost};
+    return level[sink] != -1;
+}
+
+int dfs(int cur, int total){
+    if(cur == sink) return total;
+    for(int& i = work[cur]; i < (int)g[cur].size(); ++i){
+        int nx = g[cur][i];
+        if(level[nx] == level[cur] + 1 && capacity[cur][nx] - flow[cur][nx] > 0){
+            int f = dfs(nx, min(total, capacity[cur][nx] - flow[cur][nx]));
+            if(f){
+                flow[cur][nx] += f;
+                flow[nx][cur] -= f;
+                return f;
+            }
+        }
+    }
+    return 0;
+}
+
+int dinik(){
+    int ret{0};
+    while(bfs()){
+        memset(work, 0, sizeof(work));
+        while(1){
+            int f = dfs(source, MAX);
+            if(f == 0) break;
+            ret += f;
+        }
+    }
+    return ret;
 }
 	
 int main(){
@@ -85,18 +89,17 @@ int main(){
         cin >> B[i];
     }
     for(int i{1}; i <= m; ++i){
-        addEdge(source, i, B[i], 0);
+        addEdge(source, i, B[i]);
     }
     for(int i{1}; i <= n; ++i){
-        addEdge(100 + i, sink, A[i], 0);
+        addEdge(100 + i, sink, A[i]);
     }
     for(int i{1}; i <= m; ++i){
         for(int j{1}; j <= n; ++j){
             int a;
             cin >> a;
-            addEdge(i, 100 + j, a, 0);
+            addEdge(i, 100 + j, a);
         }
     }
-    pi ans = MCMF();
-    cout << ans.first;
+    cout << dinik();
 }
