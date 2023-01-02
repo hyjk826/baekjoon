@@ -21,15 +21,13 @@ int main() {
 	ll n;
     cin >> n;
     const int sz = 8e5;
-    vi A(sz + 1, -1);
-    vi prime(sz + 1);
-    for(int i = 2; i <= sz; i++) {
-        if(prime[i]) continue;
-        A[i] = 1;
-        for(int j = 2 * i; j <= sz; j += i) {
-            prime[j] = 1;
-            if(j % (i * i) == 0) A[j] = 0;
-            else A[j] *= -1;
+    vi A(sz + 1);
+    A[1] = 1;
+    for(int i{1}; i <= sz; ++i){
+        if(A[i]){
+            for(int j{2 * i}; j <+ sz; j += i){
+                A[j] -= A[i];
+            }
         }
     }
     ll l{0}, r{(ll)1e12};
@@ -38,7 +36,7 @@ int main() {
         ll m{(l + r) / 2};
         ll sum{0};
         for(ll i{2}; i * i <= m; ++i){
-            sum += (m / (i * i)) * A[i];
+            sum += (m / (i * i)) * -A[i];
         }
         if(sum >= n){
             ans = m;
