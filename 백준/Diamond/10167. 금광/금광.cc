@@ -78,7 +78,7 @@ int main(){
         }
         for(int j{i}; j < n; ++j){
             update(1, 0, n - 1, vec[j].x, vec[j].w);
-            if(j == n - 1 || vec[j + 1].y != vec[j].y) ans = max(ans, seg[1].mid);
+            if(j == n - 1 || vec[j + 1].x != vec[j].x || vec[j].y != vec[j + 1].y) ans = max(ans, seg[1].mid);
         }
     }
     cout << ans;
