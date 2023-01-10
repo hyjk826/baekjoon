@@ -1,56 +1,63 @@
-// 2022-09-06
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+#include <string>
 using namespace std;
 
 int l, c;
-vs ans;
+vector<char> ch(16, 'z');
+char ans[16];
+int visited[30]{};
+int a{ 0 };
+int b{ 0 };
 
-void dfs(int L, int k, string str, vc& vec){
-    if(L == l){
-        int a{0}, b{0};
-        string t = "aeiou";
-        for(int i{0}; i < (int)str.size(); ++i){
-            if(t.find(str[i]) != string::npos) a++;
-            else b++;
-        }
-        if(a < 1 || b < 2) return;
-        string c = str;
-        sort(c.begin(), c.end());
-        ans.push_back(c);
-    }
-    else{
-        for(int i{k + 1}; i < c; ++i){            
-            str += vec[i];
-            dfs(L + 1, i, str, vec);
-            str.pop_back();
-        }
-    }
+void DFS(int L) {
+	if (L == l) {
+		for (int i{ 0 }; i < l; ++i) {
+			if (ans[i] == 'a' || ans[i] == 'e' || ans[i] == 'i' || ans[i] == 'o' || ans[i] == 'u')
+				a++;
+			else
+				b++;
+			if (a >= 1 && b >= 2) {
+				for (int i{ 0 }; i < l; ++i) {
+					cout << ans[i];
+				}
+				cout << "\n";
+				break;
+			}
+		}
+		a = b = 0;	
+	}
+	else {
+		if (L == 0) {
+			for (int i{ 0 }; i < c; ++i) {
+				if (visited[ch[i] - 'a'] == 0) {
+					ans[L] = ch[i];
+					visited[ch[i] - 'a'] = 1;
+					DFS(L + 1);
+					visited[ch[i] - 'a'] = 0;
+				}
+			}
+		}
+		else {
+			for (int i{ 0 }; i < c; ++i) {
+				if (visited[ch[i] - 'a'] == 0 && ch[i] > ans[L-1]) {
+					ans[L] = ch[i];
+					visited[ch[i] - 'a'] = 1;
+					DFS(L + 1);
+					visited[ch[i] - 'a'] = 0;
+				}
+			}
+		}
+	}
 }
-
 int main() {
-	fastio;
-    cin >> l >> c;
-    vc vec(c);
-    for(int i{0}; i < c; ++i){
-        cin >> vec[i];
-    }    
-    string s;
-    dfs(0, -1, s, vec);
-    sort(ans.begin(), ans.end());
-    for(auto& i : ans) cout << i << "\n";
+	ios_base::sync_with_stdio(false);
+	cin >> l >> c;
+	for (int i{ 0 }; i < c; ++i) {
+		cin >> ch[i];
+	}
+	sort(ch.begin(), ch.end());
+	DFS(0);
 }
-	
-
