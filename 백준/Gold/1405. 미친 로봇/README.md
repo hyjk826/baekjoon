@@ -1,4 +1,4 @@
-# [Gold V] 미친 로봇 - 1405 
+# [Gold IV] 미친 로봇 - 1405 
 
 [문제 링크](https://www.acmicpc.net/problem/1405) 
 
