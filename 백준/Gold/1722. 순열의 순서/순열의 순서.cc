@@ -21,7 +21,7 @@ int main(){
     int n;
     cin >> n;
     vl fact(21);
-    fact[1] = 1;
+    fact[0] = fact[1] = 1 ;
     for(int i{2}; i <= 20; ++i){
         fact[i] = fact[i - 1] * i;
     }
@@ -34,13 +34,12 @@ int main(){
     if(op == 1){
         ll a;
         cin >> a;
-        for(int i{1}; i < n; ++i){
+        for(int i{1}; i <= n; ++i){
             ll k = (a - 1) / fact[n - i];
             cout << vec[k] << " ";
             vec.erase(vec.begin() + k);
             a -= fact[n - i] * k;
         }   
-        cout << vec.front();
     }
     else{
         vi A(n);
