@@ -20,7 +20,7 @@ int main(){
 	fastio;
     int n, m;
     cin >> n >> m;
-    vi dp(m + 1);
+    vi dp(m + 1, -1);
     dp[0] = 0;
     vp A;
     for(int i{0}; i < n; ++i){
@@ -37,9 +37,10 @@ int main(){
         A.push_back({a * (c - sum), b * (c - sum)});
     }
     for(int i{0}; i < (int)A.size(); ++i){
-        for(int j{m}; j >= A[i].first; --j){
-            dp[j] = max(dp[j], dp[j - A[i].first] + A[i].second);
+        for(int j{m - A[i].first}; j >= 0; --j){
+            if(dp[j] == -1) continue;
+            dp[j + A[i].first] = max(dp[j + A[i].first], dp[j] + A[i].second);
         }
     }
-    cout << dp[m];
+    cout << *max_element(dp.begin(), dp.end());
 }
