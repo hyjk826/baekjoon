@@ -1,63 +1,92 @@
-// 2022-09-13
+// 2022-03-06
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
 	cin.tie(0);
 #define vi vector<int>
-#define vl vector<long long>
+#define vl vector<ll>
 #define vc vector<char>
-#define vs vector<string>
+#define vp vector<pair<int, int> >
 #define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
+#define sz(v) int(v.size())
+#define all(v) v.begin(), v.end()
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-int main() {
-	fastio;
-    int n, m;
+int main(){
+    fastio;
+	int n, m;
     cin >> n >> m;
-    vector<vi> g(n + 1);
-    queue<int> Q;
-    vi ch(n + 1);
-    int a, b;
-    cin >> a;
-    for(int i{0}; i < a; ++i){
-        cin >> b;
-        Q.push(b);
-        ch[b] = 1;
+    set<int> s;
+    int x;
+    cin >> x;
+    for(int i{0}; i < x; ++i){
+        int a;
+        cin >> a;
+        s.insert(a);
     }
-    vector<vi> gg(m);
-    for(int i{0}; i < m; ++i){
+    vi party[51];
+    vi P[51];
+    vi graph[51];
+    for(int i{1}; i <= m; ++i){
+        int a;
         cin >> a;
         for(int j{0}; j < a; ++j){
-            cin >> b;
-            gg[i].push_back(b);
-            g[gg[i][0]].push_back(b);
-            g[b].push_back(gg[i][0]);
+            int p;
+            cin >> p;
+            party[i].push_back(p);
+            P[p].push_back(i);
         }
     }
-    while(!Q.empty()){
-        int x{Q.front()};
-        Q.pop();
-        for(auto& i : g[x]){
-            if(ch[i] == 0){
-                ch[i] = 1;
-                Q.push(i);
+    // for(int i{1}; i <= n; ++i){
+    //     cout << i << " ";
+    //     for(int j{0}; j < (int)P[i].size(); ++j){
+    //         cout << P[i][j] << " ";
+    //     }
+    //     cout << "\n";
+    // }
+    for(int i{1}; i <= n; ++i){
+        for(int j{1}; j < (int)P[i].size(); ++j){
+            graph[P[i][0]].push_back(P[i][j]);
+            graph[P[i][j]].push_back(P[i][0]);
+        }
+    }
+    vi ch(m + 1);
+    int ans{0};
+    for(int i{1}; i <= m; ++i){
+        if(ch[i] == 0){
+            queue<int> Q;
+            Q.push(i);
+            ch[i] = 1;
+            vi v;
+            while(!Q.empty()){
+                int x{Q.front()};
+                Q.pop();
+                v.push_back(x);
+                for(int j{0}; j < (int)graph[x].size(); ++j){
+                    int nx = graph[x][j];
+                    if(ch[nx] == 0){
+                        ch[nx] = 1;
+                        Q.push(nx);
+                    }
+                }
+            }
+            bool flag = true;
+            for(int j{0}; j < (int)v.size(); ++j){
+                for(int k{0}; k < (int)party[v[j]].size(); ++k){
+                    if(s.count(party[v[j]][k]) == 1){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(!flag) break;
+            }
+            if(flag){
+                ans += v.size();
             }
         }
     }
-    int ans{0};
-    for(int i{0}; i < m; ++i){
-        bool flag = true;
-        for(auto& j : gg[i]){
-            if(ch[j]) flag = false;
-        }
-        if(flag) ans++;
-    }
     cout << ans;
 }
-	
-
