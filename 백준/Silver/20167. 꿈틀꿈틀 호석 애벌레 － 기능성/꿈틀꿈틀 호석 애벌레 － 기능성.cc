@@ -20,20 +20,22 @@ int main(){
 	fastio;
     int n, k;
     cin >> n >> k;
-    vector<vi> dp(n, vi(k, -1));
     vi vec(n);
     for(int i{0}; i < n; ++i){
         cin >> vec[i];
     }
-    function<int(int,int)> f = [&](int a, int b){
-        if(a >= n) return 0;
-        if(dp[a][b] != -1) return dp[a][b];
-        int c = b + vec[a];
-        dp[a][b] = 0;
-        if(c >= k) dp[a][b] = max(dp[a][b], c - k + f(a + 1, 0));
-        else dp[a][b] = max(dp[a][b], f(a + 1, c));
-        dp[a][b] = max(dp[a][b], f(a + 1, b));
-        return dp[a][b];
-    };
-    cout << f(0, 0);
+    int ans{0};
+    for(int i{0}; i < (1 << n); ++i){
+        int sum{0};
+        int a{0};
+        for(int j{0}; j < n; ++j){
+            if((i >> j) & 1) sum += vec[j];
+            if(sum >= k){
+                a += sum - k;
+                sum = 0;
+            }
+        }
+        ans = max(ans, a);
+    }
+    cout << ans;
 }
