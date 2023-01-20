@@ -43,6 +43,8 @@ int main(){
             int v{pQ.top().v};
             int w{pQ.top().w};
             pQ.pop();
+            if(v == e) return dijk[e];
+            if(dijk[v] < w) continue;            
             for(auto& i : g[v]){
                 if(i.second > k) continue;
                 int nv{i.first};
