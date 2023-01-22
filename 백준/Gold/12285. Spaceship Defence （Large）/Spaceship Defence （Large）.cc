@@ -44,8 +44,8 @@ void solve(){
     for(auto& i : mp){
         for(int j{0}; j < (int)i.second.size() - 1; ++j){
             g[i.second[j]].push_back({i.second[j + 1], 0});
-            g[i.second[j + 1]].push_back({i.second[j], 0});
         }
+        g[i.second.back()].push_back({i.second.front(), 0});
     }
     function<int(int,int)> f = [&](int s, int e){
         vi dijk(n, MAX);
