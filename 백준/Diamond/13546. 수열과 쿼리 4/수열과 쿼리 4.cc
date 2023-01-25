@@ -22,7 +22,7 @@ struct st{
 const int sz = 1e5 + 10000;
 int n, k, q, sq;
 vector<st> query(sz);
-vector<deque<int> > dQ(sz);
+vector<list<int> > dQ(sz);
 vi cnt(sz);
 vi vec(sz);
 vi bucket(sz);
