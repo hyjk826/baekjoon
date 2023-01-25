@@ -20,21 +20,20 @@ struct st{
 };
 
 int n, q;
-int sum{0};
 const int sz = 1e5 + 10;
 vector<st> query(sz);
-vi A;
+vl A;
 
 vl maxSeg(sz * 4);
-vi vec;
+vl vec;
 
-void update(int node, int l, int r, int idx, int value){
+void update(int node, int l, int r, int idx, ll value){
     if(l > idx || r < idx) return;
     if(l == r){
         maxSeg[node] += value;
     }
     else{
-        int m = (l + r) / 2;
+        int m = (l + r) >> 1;
         update(node * 2, l, m, idx, value);
         update(node * 2 + 1, m + 1, r, idx, value);
         maxSeg[node] = max(maxSeg[node * 2], maxSeg[node * 2 + 1]);
@@ -42,11 +41,11 @@ void update(int node, int l, int r, int idx, int value){
 }
 
 void Plus(int k){
-    update(1, 1, n, k, A[k]);
+    update(1, 0, 1e5, k, A[k]);
 }
 
 void Minus(int k){
-    update(1, 1, n, k, -A[k]);
+    update(1, 0, 1e5, k, -A[k]);
 }
 
 
