@@ -104,7 +104,7 @@ int main(){
     int n;
     cin >> n;
     vi vec;
-    for(int i{1}; i <= 12; ++i){
+    for(int i{1}; i <= 8; ++i){
         vector<vi> ch(3, vi(i));
         ch[0][0] = 1;
         int cnt{0};
