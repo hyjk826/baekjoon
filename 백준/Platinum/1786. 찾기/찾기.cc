@@ -1,18 +1,10 @@
-// 2022-09-15
 #include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
+#define fastio ios_base::sync_with_stdio(0); cin.tie(0);
 #define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
 #define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
-#define MOD 1000000007
+#define MOD 998244353LL
 using namespace std;
 
 vector<int> table(string s) {
@@ -26,7 +18,6 @@ vector<int> table(string s) {
 	return t;
 }
 
-// t가 찾으려는 문자열
 vector<int> kmp(string s, string t) {
 	vector<int> ans;
 	vector<int> tb = table(t);
@@ -47,15 +38,13 @@ vector<int> kmp(string s, string t) {
 }
 
 int main() {
-	fastio;
-    string s, t;
-    getline(cin, s);
-    getline(cin, t);
-    vi r = kmp(s, t);
-    cout << r.size() << "\n";
-    for(auto& i : r){
-        cout << i + 1 << " ";
-    }
+    fastio;
+	string s, t;
+	getline(cin, s);
+	getline(cin, t);
+	vector<int> ans = kmp(s, t);
+	cout << ans.size() << "\n";
+	for (auto& i : ans) {
+		cout << i + 1 << " ";
+	}
 }
-	
-
