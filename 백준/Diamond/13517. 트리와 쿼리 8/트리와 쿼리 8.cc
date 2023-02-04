@@ -124,9 +124,17 @@ int query(Node* a, Node* b, Node* c, Node* d, int l, int r, int k){
 
 int main(){
 	fastio;
+    int q;
     cin >> n;
+    vi B;
     for(int i{1}; i <= n; ++i){
         cin >> A[i];
+        B.push_back(A[i]);
+    }
+    sort(B.begin(), B.end());
+    B.erase(unique(B.begin(), B.end()), B.end());
+    for(int i{1}; i <= n; ++i){
+        A[i] = lower_bound(B.begin(), B.end(), A[i]) - B.begin(); 
     }
     for(int i{0}; i < n - 1; ++i){
         int a, b;
@@ -135,10 +143,10 @@ int main(){
         g[b].push_back(a);
     }
     root[0] = new Node();
-    init(root[0], 1, 1000000);
+    init(root[0], 0, n - 1);
     function<void(int,int)> dfs = [&](int cur, int pre){
         root[cur] = new Node();
-        update(root[pre], root[cur], 1, 1000000, A[cur], 1);
+        update(root[pre], root[cur], 0, n - 1, A[cur], 1);
         for(auto& i : g[cur]){
             if(i == pre) continue;
             dfs(i, cur);
@@ -147,12 +155,11 @@ int main(){
     par[1][0] = 0;
     dfs(1, 0);
     bfs();
-    int q;
     cin >> q;
     while(q--){
         int a, b, c;
         cin >> a >> b >> c;
         int lca = LCA(a, b);
-        cout << query(root[a], root[b], root[lca], root[par[lca][0]], 1, 1000000, c) << "\n";
+        cout << B[query(root[a], root[b], root[lca], root[par[lca][0]], 0, n - 1, c)] << "\n";
     }
 }
