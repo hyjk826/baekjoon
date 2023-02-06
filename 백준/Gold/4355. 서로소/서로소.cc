@@ -99,6 +99,10 @@ int main() {
         ll n;
         cin >> n;
         if(n == 0) break;
+        if(n == 1){
+            cout << 0 << "\n";
+            continue;
+        }
         vl ans;
         pollard_rho(n, ans);
         sort(ans.begin(), ans.end());
