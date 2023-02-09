@@ -15,7 +15,7 @@
 #define MOD 1000000007
 using namespace std;
 
-const int sz = 1e5 + 10;
+const int sz = 400;
 int id{0};
 int d[sz]{};
 int sccNum; 
