@@ -15,52 +15,37 @@
 #define MOD 1000000007
 using namespace std;
 
+struct SuffixArray {
+    vi sa , lcp ;
+    SuffixArray ( string &s , int lim = 256 ) {
+        int n = (int)s.size() + 1, k = 0 ,a , b ;
+        vi x(s.begin(), s.end() + 1) , y(n), ws(max(n,lim)),rank(n);
+        sa = lcp = y, iota(sa.begin(), sa.end(),0) ;
+        for ( int j = 0 , p = 0 ; p < n ; j = max ( 1 , j * 2 ) , lim = p ) {
+            p = j , iota(y.begin(), y.end(),n-j);
+            for(int i{0}; i < n; ++i) if (sa[i] >= j) y[p++] = sa[i] - j;
+            fill(ws.begin(), ws.end(),0);
+            for(int i{0}; i < n; ++i) ws[x[i]]++;
+            for(int i{1}; i < lim; ++i) ws[i] += ws[i-1];
+            for ( int i=n; i--;) sa[--ws[x[y[i]]]] = y[i];
+            swap(x,y), p=1, x[sa[0]]=0;
+            for(int i{1}; i < n; ++i) a = sa[ i - 1 ], b = sa[i], x[b] =
+                (y[a] == y[b] && y[a+j] == y[b+j]) ? p - 1 : p ++ ;
+        }
+        for(int i{1}; i < n; ++i) rank[sa[i]] = i;
+        for (int i = 0, j; i < n - 1; lcp[rank[i++]] = k)
+            for (k && k--, j = sa[rank[i] - 1];
+                 s[i+k] == s[j+k];k++);
+    }
+};
+
+
 int main(){
 	fastio;
     int n;
     cin >> n;
     string str;
     cin >> str;
-    int l{0}, r{n};
-    int mod = 1e5;
-    int ans{0};
-    while(l <= r){
-        int mid{(l + r) / 2};
-        ll x{0}, y{0}, power{1};
-        vector<vi> g(mod);
-        bool ok = false;
-        for(int i{0}; i <= n - mid; ++i){
-            if(i == 0){
-                for(int j{0}; j < mid; ++j){
-                    x = (x + str[mid - 1 - j] * power) % mod;
-                    if(j < mid - 1) power = (power * 403) % mod;
-                }
-            }
-            else {
-                x = (403 * (x - str[i - 1] * power) + str[i + mid - 1]) % mod;
-                if(x < 0) x += mod;
-            }
-            for(auto& j : g[x]){
-                bool ok2 = true;
-                for(int k{0}; k < mid; ++k){
-                    if(str[i + k] != str[j + k]){
-                        ok2 = false;
-                        break;
-                    }
-                }
-                if(ok2){
-                    ok = true;
-                    break;
-                }
-            }
-            if(ok) break;
-            else g[x].push_back(i);
-        }
-        if(ok){
-            ans = mid;
-            l = mid + 1;
-        }
-        else r = mid - 1;
-    }
-    cout << ans;
+    SuffixArray sf(str);
+    cout << *max_element(sf.lcp.begin(), sf.lcp.end());
 }
