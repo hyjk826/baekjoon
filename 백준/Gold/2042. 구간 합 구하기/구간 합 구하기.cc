@@ -1,4 +1,4 @@
-// 2022-04-01
+// 2022-09-14
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -6,64 +6,75 @@
 #define vi vector<int>
 #define vl vector<long long>
 #define vc vector<char>
+#define vs vector<string>
 #define pi pair<int, int>
+#define pl pair<ll, ll>
 #define vp vector<pi>
 #define ll long long
 #define MAX 2147000000
-#define MOD 998244353LL
+#define MOD 1000000007
 using namespace std;
 
-template <typename T>
-struct binary_indexed_tree{
-  int N;
-  vector<T> BIT;
-  binary_indexed_tree(int N): N(N), BIT(N + 1, 0){
-  }
-  void add(int i, T x){
-    i++;
-    while (i <= N){
-      BIT[i] += x;
-      i += i & -i;
-    }
-  }
-  T sum(int i){
-    T ans = 0;
-    while (i > 0){
-      ans += BIT[i];
-      i -= i & -i;
-    }
-    return ans;
-  }
-};
+vl seg(4000001);
+vl vec(1000000);
 
-int main(){
-    fastio;
+void init(int node, int l, int r){
+    if(l == r){
+        seg[node] = vec[l];
+    }
+    else{
+        int m = (l + r) / 2;
+        init(node * 2, l, m);
+        init(node * 2 + 1, m + 1, r);
+        seg[node] = seg[node * 2] + seg[node * 2 + 1];
+    }
+}
+
+ll sum(int node, int l, int r, int s, int e){
+    if(r < s || e < l) return 0;
+    if(s <= l && r <= e) return seg[node];
+    int m = (l + r) / 2;
+    return sum(node * 2, l, m, s, e) + sum(node * 2 + 1, m + 1, r, s, e);
+}
+
+void update(int node, int l, int r, int idx, ll value){
+    if(l > idx || r < idx) return;
+    if(l == r){
+        seg[node] = value;
+        vec[idx] = value;
+    }
+    else{
+        int m = (l + r) / 2;
+        update(node * 2, l, m, idx, value);
+        update(node * 2 + 1, m + 1, r, idx, value);            
+        seg[node] = seg[node * 2] + seg[node * 2 + 1];
+    }
+}
+
+
+
+
+int main() {
+	fastio;
     int n, m, k;
     cin >> n >> m >> k;
-    vl vec(n);
-    binary_indexed_tree<ll> bit(n + 1);
     for(int i{0}; i < n; ++i){
         cin >> vec[i];
-        bit.add(i, vec[i]);
     }
+    init(1, 0, n - 1);
     for(int i{0}; i < m + k; ++i){
-        int a;
-        cin >> a;
-        if(a == 1){
-            int b;
-            ll c;
-            cin >> b >> c;
-            b--;
-            ll dif = c - vec[b];
-            vec[b] = c;
-            bit.add(b, dif);
+        ll q, a, b;
+        cin >> q >> a >> b;
+        if(q == 1){
+            a--;
+            update(1, 0, n - 1, a, b);
         }
         else{
-            int b, c;
-            cin >> b >> c;
+            a--;
             b--;
-            c--;
-            cout << bit.sum(c + 1) - bit.sum(b) << '\n';
+            cout << sum(1, 0, n - 1, a, b) << "\n";
         }
     }
 }
+	
+
