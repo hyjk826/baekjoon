@@ -15,30 +15,52 @@
 #define MOD 1000000007
 using namespace std;
 
-struct SparseTable{
-	vector<vl> lookup;
-	SparseTable(vl& arr){
-		lookup.resize((int)arr.size(), vl(20));
-		int n = (int)arr.size();
-		for (int i = 0; i < n; i++)
-			lookup[i][0] = arr[i];
-		for (int j = 1; (1 << j) <= n; j++) {
-			for (int i = 0; (i + (1 << j) - 1) < n; i++) {
-				lookup[i][j] = max(lookup[i][j - 1], lookup[i + (1 << (j - 1))][j - 1]);
-			}
-		}
-	}
-	ll query(int L, int R){
-		int j = (int)log2(R - L + 1);
-		return max(lookup[L][j], lookup[R - (1 << j) + 1][j]);
-	}
-};
+const int sz = 1e6 + 10;
+vl maxSeg(sz * 4);
+vl A;
+
+void init(int node, int l, int r){
+    if (l == r){
+        maxSeg[node] = A[l];
+        return;
+    }
+    int m = (l + r) / 2;
+    init(node * 2, l, m);
+    init(node * 2 + 1, m + 1, r);
+    maxSeg[node] = max(maxSeg[node * 2], maxSeg[node * 2 + 1]);
+}
+
+void update(int node, int l, int r, int idx, int value){
+    if(l > idx || r < idx) return;
+    if(l == r){
+        maxSeg[node] = value;
+    }
+    else{
+        int m = (l + r) / 2;
+        update(node * 2, l, m, idx, value);
+        update(node * 2 + 1, m + 1, r, idx, value);
+        maxSeg[node] = max(maxSeg[node * 2], maxSeg[node * 2 + 1]);
+    }
+}
+
+ll query(int node, int l, int r, int s, int e)
+{
+    if (r < s || e < l)
+        return -LLONG_MAX;
+    if (s <= l && r <= e)
+        return maxSeg[node];
+    int m = (l + r) / 2;
+    ll left = query(node * 2, l, m, s, e);
+    ll right = query(node * 2 + 1, m + 1, r, s, e);
+    return max(left, right);
+}
 
 int main(){
 	fastio;
     int n, k;
     cin >> n >> k;
-    vl A(n + 1), B(n + 1);
+    A.resize(n + 1);
+    vl B(n + 1);
     for(int i{1}; i <= n; ++i){
         cin >> A[i];
     }
@@ -53,11 +75,11 @@ int main(){
         A[i] += A[i - 1];
         B[i] += B[i - 1];
     }
-    SparseTable sp(A);
+    init(1, 0, 2 * n);
     ll ans{-LLONG_MAX};
     for(int i{1}; i <= n; ++i){
         int idx = lower_bound(B.begin(), B.end(), B[i - 1] + k) - B.begin();
-        ans = max(ans, sp.query(idx, i - 1 + n) - A[i - 1]);
+        ans = max(ans, query(1, 0, 2 * n, idx, i - 1 + n) - A[i - 1]);
     }
     cout << ans;
 }
