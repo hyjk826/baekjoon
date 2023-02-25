@@ -1,4 +1,3 @@
-// 2022-07-28
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -10,16 +9,16 @@
 #define pi pair<int, int>
 #define pl pair<ll, ll>
 #define vp vector<pi>
+#define vpl vector<pl>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-int main() {
+int main(){
 	fastio;
     int a, b, c;
     cin >> a >> b >> c;
-    if(a + b >= 2 * c) cout << a + b - 2 * c;
+    if(a + b >= c * 2) cout << a + b - c * 2;
     else cout << a + b;
 }
-
