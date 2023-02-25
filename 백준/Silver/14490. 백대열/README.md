@@ -8,7 +8,7 @@
 
 ### 분류
 
-유클리드 호제법(euclidean), 수학(math), 정수론(number_theory), 파싱(parsing), 문자열(string)
+유클리드 호제법(euclidean), 수학(math), 정수론(number_theory), 문자열(string)
 
 ### 문제 설명
 
