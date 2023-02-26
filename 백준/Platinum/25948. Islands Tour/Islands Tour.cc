@@ -21,7 +21,7 @@ int id{0};
 int d[sz]{}; 
 int sccNum; 
 int sn[sz]; 
-vector<int> g[sz];
+int g[sz];
 bool finished[sz]; 
 stack<int> s;
 
@@ -29,7 +29,8 @@ int dfs(int c) {
 	d[c] = ++id; 
 	s.push(c); 
 	int result = d[c];
-	for (int next : g[c]) {
+	if(g[c] != -1){
+        int next = g[c];
 		if (d[next] == 0) result = min(result, dfs(next));
 		else if (!finished[next]) result = min(result, d[next]);
 	}
@@ -62,21 +63,21 @@ int main(){
 	fastio;
     int m, n;
     cin >> m >> n;
+    memset(g, -1, sizeof(g));
+    memset(g2, -1, sizeof(g2));
+    memset(dp, -1, sizeof(dp));
     for(int i{0}; i < m; ++i){
         int a, b;
         cin >> a >> b;
-        g[a].push_back(b);
+        g[a] = b;
     }
     for(int i{0}; i < n; ++i){
         if(d[i] == 0) dfs(i);
     }
-    memset(g2, -1, sizeof(g2));
-    memset(dp, -1, sizeof(dp));
     for(int i{0}; i < n; ++i){
-        for(auto& j : g[i]){
-            if(sn[i] != sn[j]) g2[sn[i]] = sn[j];
-        }
         cnt[sn[i]]++;
+        if(g[i] == -1) continue;
+        if(sn[i] != sn[g[i]]) g2[sn[i]] = sn[g[i]];        
     }
     int ans{0};
     for(int i{0}; i < sccNum; ++i){
