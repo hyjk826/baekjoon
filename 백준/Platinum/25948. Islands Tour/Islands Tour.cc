@@ -47,16 +47,14 @@ int dfs(int c) {
 }
 
 
-vector<vi> g2(sz);
+int g2[sz];
 int cnt[sz];
 int dp[sz];
 
 int f(int a){
+    if(a == -1) return 0;
     if(dp[a] != -1) return dp[a];
-    dp[a] = cnt[a];
-    for(auto& i : g2[a]){
-        dp[a] = max(dp[a], cnt[a] + f(i));
-    }
+    dp[a] = cnt[a] + f(g2[a]);
     return dp[a];
 }
 
@@ -72,13 +70,14 @@ int main(){
     for(int i{0}; i < n; ++i){
         if(d[i] == 0) dfs(i);
     }
+    memset(g2, -1, sizeof(g2));
+    memset(dp, -1, sizeof(dp));
     for(int i{0}; i < n; ++i){
         for(auto& j : g[i]){
-            if(sn[i] != sn[j]) g2[sn[i]].push_back(sn[j]);
+            if(sn[i] != sn[j]) g2[sn[i]] = sn[j];
         }
         cnt[sn[i]]++;
     }
-    memset(dp, -1, sizeof(dp));
     int ans{0};
     for(int i{0}; i < sccNum; ++i){
         ans = max(ans, f(i));
