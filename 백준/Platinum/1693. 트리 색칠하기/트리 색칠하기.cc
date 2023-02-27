@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
+#define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
+#define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
+#define vpl vector<pl>
+#define ll long long
+#define MAX 2147000000
+#define MOD 1000000007
+using namespace std;
+
+int main(){
+	fastio;
+    int n;
+    cin >> n;
+    vector<vi> g(n + 1);
+    for(int i{0}; i < n - 1; ++i){
+        int a, b;
+        cin >> a >> b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    vector<vi> dp(n + 1, vi(21, -1));
+    function<int(int,int,int)> f = [&](int cur, int pre, int color){
+        if(dp[cur][color] != -1) return dp[cur][color];
+        dp[cur][color] = color;
+        for(auto& i : g[cur]){
+            if(i == pre) continue;
+            int mn{MAX};
+            for(int j{1}; j <= 20; ++j){
+                if(j == color) continue;
+                mn = min(mn, f(i, cur, j));
+            }   
+            dp[cur][color] += mn;
+        }
+        return dp[cur][color];
+    };
+    int ans{MAX};
+    for(int i{1}; i <= 20; ++i){
+        ans = min(ans, f(1, -1, i));
+    }
+    cout << ans;
+}
