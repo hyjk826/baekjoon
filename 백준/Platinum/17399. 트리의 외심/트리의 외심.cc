@@ -17,8 +17,8 @@ using namespace std;
 
 const int sz = 1e5 + 10;
 vi g[sz];
-vi depth(sz, -1);
-vector<vi> par(sz, vi(20, -1));
+int depth[sz];
+int par[sz][20];
 int root = 1;
 int n;
 
@@ -95,6 +95,8 @@ int getMid(int a, int b){
 
 int main(){
 	fastio;
+    memset(par, -1, sizeof(par));
+    memset(depth, -1, sizeof(depth));
     cin >> n;
     for(int i{0}; i < n - 1; ++i){
         int a, b;
