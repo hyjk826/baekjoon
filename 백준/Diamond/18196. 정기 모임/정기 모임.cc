@@ -17,8 +17,8 @@ using namespace std;
 
 const int sz = 3e5 + 10;
 vector<vp> g(sz);
-vi depth(sz, -1);
-vector<vi> par(sz, vi(20, -1));
+int depth[sz];
+int par[sz][20];
 vector<vi> mx(sz, vi(20));
 int root = 1;
 int n, m;
@@ -102,6 +102,8 @@ int query(int node, int l, int r, int s, int e)
 
 int main(){
 	fastio;
+    memset(depth, -1, sizeof(depth));
+    memset(par, -1, sizeof(par));
     int q;
     cin >> n >> q;
     for(int i{0}; i < n - 1; ++i){
