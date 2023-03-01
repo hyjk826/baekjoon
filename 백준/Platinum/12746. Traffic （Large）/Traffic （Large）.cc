@@ -16,51 +16,12 @@
 #define MOD 1000000007
 using namespace std;
 
-int sz = (int)3e5 + 10;
+const int sz = (int)3e5 + 10;
 int n, q;
 
+int imos[sz];
 
-struct st {
-	int v, lazy;
-    st() : v(0), lazy(0){}
-};
-
-vector<st> seg(sz * 4);
-
-void propogate(int node, int l, int r){
-	if (seg[node].lazy != 0) {
-		seg[node].v += seg[node].lazy * (ll)(r - l + 1);
-		if (l != r) {
-			seg[node * 2].lazy += seg[node].lazy;
-			seg[node * 2 + 1].lazy += seg[node].lazy;
-		}
-		seg[node].lazy = 0;
-	}
-}
-
-void segUpdate(int node, int l, int r, int s, int e) {
-	propogate(node, l, r);
-	if (e < l || r < s) return;
-	if (s <= l && r <= e) {
-		seg[node].lazy += 1;
-		propogate(node, l, r);
-		return;
-	}
-	int m{ (l + r) >> 1 };
-	segUpdate(node * 2, l, m, s, e);
-	segUpdate(node * 2 + 1, m + 1, r, s, e);
-	seg[node].v = seg[node << 1].v + seg[node << 1 | 1].v;
-}
-
-int segQuery(int node, int l, int r, int s, int e) {
-	propogate(node, l, r);
-	if (e < l || r < s) return 0;
-	if (s <= l && r <= e) return seg[node].v;
-	int m{ (l + r) >> 1};
-	return segQuery(node * 2, l, m, s, e) + segQuery(node * 2 + 1, m + 1, r, s, e);
-}
-
-vi sub(sz), depth(sz), par(sz), top(sz), in(sz);
+int sub[sz], depth[sz], par[sz], top[sz], in[sz];
 
 vector<vi> tempg(sz);
 vector<vi> g(sz);
@@ -101,11 +62,13 @@ void update(int a, int b){
     while(top[a] ^ top[b]){
         if(depth[top[a]] < depth[top[b]]) swap(a, b);
         int st = top[a];
-        segUpdate(1, 1, n, in[st], in[a]);
+        imos[in[st]]++;
+        imos[in[a] + 1]--;
         a = par[st];
     }
     if(depth[a] > depth[b]) swap(a, b);
-    segUpdate(1, 1, n, in[a] + 1, in[b]);
+    imos[in[a] + 1]++;
+    imos[in[b] + 1]--;
 }
 
 
@@ -130,7 +93,10 @@ int main(){
     int mx{0};
     pi ans;
     for(int i{1}; i <= n; ++i){
-        int k = segQuery(1, 1, n, in[i], in[i]);
+        imos[i] += imos[i - 1];
+    }
+    for(int i{1}; i <= n; ++i){
+        int k = imos[in[i]];
         if(k > mx){
             mx = k;
             ans = {min(i, par[i]), max(i, par[i])};
