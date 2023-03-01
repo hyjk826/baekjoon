@@ -16,7 +16,7 @@
 #define MOD 1000000007
 using namespace std;
 
-const int sz = (int)3e5 + 10;
+const int sz = 222222 + 10;
 int n, q;
 
 int imos[sz];
