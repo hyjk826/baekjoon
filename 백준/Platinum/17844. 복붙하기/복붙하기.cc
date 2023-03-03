@@ -31,11 +31,15 @@ void hashing(string& str){
     for(int i{1}; i <= n; ++i) pw2[i] = pw2[i - 1] * p2 % mod2;
 }
 
+unordered_map<ll, ll> mp;
+
 ll substr(int l, int r){
     ll r1 = ha1[l] - ha1[r + 1] * pw1[r - l + 1]; r1 %= mod1; if(r1 < 0) r1 += mod1;
     ll r2 = ha2[l] - ha2[r + 1] * pw2[r - l + 1]; r2 %= mod2; if(r2 < 0) r2 += mod2;
     return (r1 << 32 | r2);
 }
+
+
 
 int main(){
 	fastio;
@@ -47,18 +51,17 @@ int main(){
     int n = (int)str.size();
     while(l <= r){
         int mid{(l + r) / 2};
-        unordered_map<ll, pi> mp;
+        unordered_map<ll, int> mp;
+        bool ok = false;
         for(int i{0}; i + mid - 1 <= n - 1; ++i){
             ll k = substr(i, i + mid - 1);
-            if(mp.count(k)) mp[k].second = i;
-            else mp[k] = {i, i};
-        }
-        bool ok = false;
-        for(auto& i : mp){
-            if(i.second.first + mid - 1 < i.second.second){
-                ok = true;
-                break;
+            if(mp.count(k)) {
+                if(mp[k] + mid - 1 < i){
+                    ok = true;
+                    break;
+                }
             }
+            else mp[k] = i;
         }
         if(ok){
             ans = mid;
