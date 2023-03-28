@@ -1,4 +1,3 @@
-// 2022-11-28
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -16,30 +15,27 @@
 #define MOD 1000000007
 using namespace std;
 
-
-int main() {
+int main(){
 	fastio;
-	int k, n;
-    cin >> k >> n;
+    int m, n;
+    cin >> m >> n;
     vi vec(n);
     for(int i{0}; i < n; ++i){
         cin >> vec[i];
     }
-    ll l{0}, r{(ll)1e12};
+    ll l{1}, r{(ll)1e14};
     ll ans{0};
     while(l <= r){
-        ll m{(l + r) / 2};
-        if(m == 0) break;
+        ll mid{(l + r) >> 1};
         ll sum{0};
         for(int i{0}; i < n; ++i){
-            sum += vec[i] / m;
+            sum += vec[i] / mid;
         }
-        if(sum >= k){
-            l = m + 1;
-            ans = m;
+        if(sum >= m){
+            ans = mid;
+            l = mid + 1;
         }
-        else r = m - 1;
+        else r = mid - 1;
     }
     cout << ans;
 }
-	
