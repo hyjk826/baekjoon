@@ -32,7 +32,7 @@ int main() {
     cin >> s >> t;
     for (int i{ min((int)s.size(), (int)t.size()) }; i >= 1; --i) {
         vi cnt(26);
-        set<ll> st;
+        unordered_set<ll> st;
         for (int j{ 0 }; j < i - 1; ++j) {
             cnt[s[j] - 'a']++;
         }
