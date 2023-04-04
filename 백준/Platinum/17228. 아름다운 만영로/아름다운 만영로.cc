@@ -30,8 +30,6 @@ ll k;
 
 const int sz = 5e5 + 10;
 vector<vector<pair<int, char>> > g(sz);
-ll pw1[sz];
-ll pw2[sz];
 vl A, B;
 int ans{0};
 ll a = 1; 
