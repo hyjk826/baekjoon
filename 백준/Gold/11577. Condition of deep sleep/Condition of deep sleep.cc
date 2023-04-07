@@ -1,4 +1,3 @@
-// 2022-11-26
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -16,28 +15,29 @@
 #define MOD 1000000007
 using namespace std;
 
-int main() {
-	int n, k;
+int main(){
+	fastio;
+    int n, k;
     cin >> n >> k;
-    vi vec(n + 1);
-    for(int i{1}; i <= n; ++i){
+    vi vec(n);
+    for(int i{0}; i < n; ++i){
         cin >> vec[i];
     }
-    vi pre(n + 2);
-    bool ok = true;
+    vi pre(n);
     int ans{0};
-    for(int i{1}; i <= n; ++i){
-        pre[i] += pre[i - 1];
-        if(pre[i] & 1) vec[i] ^= 1;
-        if(i <= n - k + 1 && vec[i] == 1){
-            ans++;
-            pre[i]++;
-            pre[i + k]--;
-            vec[i] = 0;
-        }
-        else if(i > n - k  + 1 && vec[i] == 1) ok = false;
+    for(int i{0}; i <= n - k; ++i){
+        if(i) pre[i] += pre[i - 1];
+        if(vec[i] == 1 && pre[i] % 2 == 1) continue;
+        if(vec[i] == 0 && pre[i] % 2 == 0) continue;
+        ans++;
+        pre[i]++;
+        if(i + k < n) pre[i + k]--;        
     }
-    if(ok) cout << ans;
-    else cout << "Insomnia";
+    for(int i{n - k + 1}; i < n; ++i){
+        pre[i] += pre[i - 1];   
+        if(vec[i] == 1 && pre[i] % 2 == 1) continue;
+        if(vec[i] == 0 && pre[i] % 2 == 0) continue;        
+        cout << "Insomnia"; return 0;
+    }
+    cout << ans;
 }
-	
