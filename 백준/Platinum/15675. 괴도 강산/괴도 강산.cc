@@ -16,7 +16,7 @@
 using namespace std;
 
 
-const int sz = 1e5 + 10;
+const int sz = 4e4 + 10;
 int id{0};
 int d[sz]{};
 int sccNum = 1; 
