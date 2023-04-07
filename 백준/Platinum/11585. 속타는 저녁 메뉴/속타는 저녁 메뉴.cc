@@ -15,32 +15,42 @@
 #define MOD 1000000007
 using namespace std;
 
-int rabin_karp(string& s, string t){
-    int n = (int)s.size();
-    int m = (int)t.size();
-    ll x{0}, y{0}, power{1};
-    int ret{0};
-    for(int i{0}; i <= n - m; ++i){
-        if(i == 0){
-            for(int j{0}; j < m; ++j){
-                x = (x + s[m - 1 - j] * power) % MOD;
-                y = (y + t[m - 1 - j] * power) % MOD;
-                if(j < m - 1) power = (power * 403) % MOD;
-            }            
-        }
-        else{
-            x = (403 * (x - s[i - 1] * power) + s[i + m - 1]) % MOD;
-            if(x < 0) x += MOD;
-        }
-        if(x == y) ret++;
-    }
-    return ret;
+vector<int> table(string s) {
+	int m{ (int)s.size() };
+	vector<int> t(m);
+	int j{ 0 };
+	for (int i{ 1 }; i < m; ++i) {
+		while (j && s[i] != s[j]) j = t[j - 1];
+		if (s[i] == s[j]) t[i] = ++j;
+	}
+	return t;
+}
+
+// t가 찾으려는 문자열
+vector<int> kmp(string s, string t) {
+	vector<int> ans;
+	vector<int> tb = table(t);
+	int n{ (int)s.size() };
+	int m{ (int)t.size() };
+	int j{ 0 };
+	for (int i{ 0 }; i < n; ++i) {
+		while (j && s[i] != t[j]) j = tb[j - 1];
+		if (s[i] == t[j]) {
+			if (j == m - 1) {
+				ans.push_back(i - m + 1);
+				j = tb[j];
+			}
+			else j++;
+		}
+	}
+	return ans;
 }
 
 int gcd(int a, int b){
     if(b == 0) return a;
     return gcd(b, a % b);
 }
+
 
 int main(){
 	fastio;
@@ -60,8 +70,10 @@ int main(){
     for(int i{0}; i < n - 1; ++i){
         s += s[i];
     }
-    int ret = rabin_karp(s, t);
-    int g = gcd(ret, n);
-    ret /= g; n /= g;
-    cout << ret << "/" << n;
+    auto ret = kmp(s, t);
+    int k = (int)ret.size();
+    int g = gcd(k, n);
+    k /= g;
+    n /= g;
+    cout << k << "/" << n;
 }
