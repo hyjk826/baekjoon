@@ -19,15 +19,6 @@ int main(){
 	fastio;
     int n;
     cin >> n;
-    vector<vi> g(n + 1);
-    for(int i{0}; i <= n; ++i){
-        for(int j{0}; j < 20; ++j){
-            int k = i ^ (1 << j);
-            if(k <= n) {
-                g[i].push_back(k);
-            }
-        }
-    }
     int m;
     cin >> m;
     queue<int> Q;
@@ -41,7 +32,9 @@ int main(){
     while(!Q.empty()){
         int x{Q.front()};
         Q.pop();
-        for(auto& i : g[x]){
+        for(int j{0}; j < 20; ++j){
+            int i = x ^ (1 << j);
+            if(i > n) continue;
             if(dist[i] == -1){
                 dist[i] = dist[x] + 1;
                 Q.push(i);
