@@ -15,11 +15,12 @@
 #define MOD 1000000007
 using namespace std;
 
+int cnt[1000001];
+
 int main(){
 	fastio;
     int n;
-    cin >> n;
-    vi cnt(1000001);
+    cin >> n;    
     int ans{0};
     for(int i{0}; i < n; ++i){
         int a;
