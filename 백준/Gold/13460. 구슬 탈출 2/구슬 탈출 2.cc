@@ -1,54 +1,53 @@
-// 2022-09-15
-#include <bits/stdc++.h>
-#define fastio                    \
-	ios_base::sync_with_stdio(0); \
-	cin.tie(0);
-#define vi vector<int>
-#define vl vector<long long>
-#define vc vector<char>
-#define vs vector<string>
-#define pi pair<int, int>
-#define pl pair<ll, ll>
-#define vp vector<pi>
-#define ll long long
-#define MAX 2147000000
-#define MOD 1000000007
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <cstring>
+#include <string>
 using namespace std;
 
+char map[10][10];
+int n, m;
+int rx, ry;
+int bx, by;
 int xx[]{ -1,0,1,0 };
 int yy[]{ 0,1,0,-1 };
+int visit[10][10][10][10]{};
 
 struct edge {
 	int rx, ry, bx, by, cnt;
+	edge(int a, int b, int c, int d, int e) {
+		rx = a;
+		ry = b;
+		bx = c;
+		by = d;
+		cnt = e;
+	}
 };
-int ch[10][10][10][10]{};
 
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	int n, m;
 	cin >> n >> m;
-	edge s;
-	s.cnt = 0;
-	queue<edge> Q;
-	vector<vector<char> > map(n, vector<char>(m));
+	edge s(0, 0, 0, 0, 0);
 	for (int i{ 0 }; i < n; ++i) {
 		for (int j{ 0 }; j < m; ++j) {
 			cin >> map[i][j];
 			if (map[i][j] == 'R') {
 				s.rx = i;
 				s.ry = j;
-				map[i][j] = '.';
+				map[i][j] == '.';
 			}
-			else if (map[i][j] == 'B') {
+			else if(map[i][j] == 'B'){
 				s.bx = i;
 				s.by = j;
 				map[i][j] = '.';
 			}
 		}
 	}
+	s.cnt = 0;
+	queue<edge> Q;
+	visit[s.rx][s.ry][s.bx][s.by] = 1;
 	Q.push(s);
-	ch[s.rx][s.ry][s.bx][s.by] = 1;
 	int ans{ -1 };
 	while (!Q.empty()) {
 		edge x = Q.front();
@@ -102,12 +101,11 @@ int main() {
 					}
 				}
 			}
-			if (ch[nrx][nry][nbx][nby] == 0) {
-				ch[nrx][nry][nbx][nby] = 1;
+			if (visit[nrx][nry][nbx][nby] == 0) {
+				visit[nrx][nry][nbx][nby] = 1;
 				Q.push({ nrx,nry,nbx,nby,x.cnt + 1 });
 			}
 		}
 	}
 	cout << ans;
 }
-
