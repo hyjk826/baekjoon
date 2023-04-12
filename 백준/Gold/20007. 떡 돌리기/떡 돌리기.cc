@@ -34,28 +34,24 @@ int main(){
         g[a].push_back({b, c});
         g[b].push_back({a, c});
     }
-    function<vi(int)> f = [&](int a){
-        vi dijk(n, MAX);
-        priority_queue<st> pQ;
-        pQ.push({a, 0});
-        dijk[a] = 0;
-        while(!pQ.empty()){
-            int v{pQ.top().v};
-            int w{pQ.top().w};
-            pQ.pop();
-            if(dijk[v] < w) continue;
-            for(auto& i : g[v]){
-                int nv{i.first};
-                int nw{w + i.second};
-                if(dijk[nv] > nw){
-                    dijk[nv] = nw;
-                    pQ.push({nv, nw});
-                }
+    vi dijk(n, MAX);
+    priority_queue<st> pQ;
+    pQ.push({y, 0});
+    dijk[y] = 0;
+    while(!pQ.empty()){
+        int v{pQ.top().v};
+        int w{pQ.top().w};
+        pQ.pop();
+        if(dijk[v] < w) continue;
+        for(auto& i : g[v]){
+            int nv{i.first};
+            int nw{w + i.second};
+            if(dijk[nv] > nw){
+                dijk[nv] = nw;
+                pQ.push({nv, nw});
             }
         }
-        return dijk;
-    };
-    vi dijk = f(y);
+    }
     sort(dijk.begin(), dijk.end());
     for(auto& i : dijk){
         i *= 2;
