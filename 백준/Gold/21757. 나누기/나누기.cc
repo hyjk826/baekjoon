@@ -31,16 +31,13 @@ int main(){
             for(int i{1}; i < n; ++i){
                 if(vec[i] == 0) cnt++;
             }
-            if(cnt <= 2) cout << 0;
-            else{
-                cout << 1LL * cnt * (cnt - 1) * (cnt - 2) / 6; 
-            }
+            cout << 1LL * cnt * (cnt - 1) * (cnt - 2) / 6; 
         }
         else{
             vl dp(4);
             dp[0] = 1;
             for(int i{1}; i < n; ++i){
-                if(vec[i] % k == 0 && vec[i] / k <= 3){
+                if(vec[i] % k == 0 && vec[i] / k <= 3 && vec[i] / k > 0){
                     ll a = vec[i] / k;
                     dp[a] += dp[a - 1];
                 }
