@@ -77,14 +77,14 @@ int main(){
             ans += 1LL * cnt * (cnt - 1) / 2;
         }
     }
-    map<pi, int> mp;
+    unordered_map<ll, int> mp;
     for(int i{0}; i <(int)s2.size(); ++i){
         if(s2[i].empty()) continue;
         for(int j{0}; j < (int)s2[i].size(); ++j){
             for(int k{j + 1}; k < (int)s2[i].size(); ++k){
                 int a = min(s2[i][j], s2[i][k]);
                 int b = max(s2[i][j], s2[i][k]);
-                mp[{a, b}]++;
+                mp[(ll)a << 32 | b]++;
             }
         }
     }
