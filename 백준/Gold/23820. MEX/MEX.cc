@@ -15,7 +15,7 @@
 #define MOD 1000000007
 using namespace std;
 
-int ch[2000004];
+bool ch[2000004];
 
 int main(){
 	fastio;
