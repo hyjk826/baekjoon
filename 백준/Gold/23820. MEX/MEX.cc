@@ -16,7 +16,6 @@
 using namespace std;
 
 int ch[2000004];
-int ch2[2000004];
 
 int main(){
 	fastio;
@@ -30,14 +29,15 @@ int main(){
     vi A;
     for(int i{0}; i <= 2000003; ++i){
         if(ch[i]) A.push_back(i);
+        ch[i] = 0;
     }
     for(auto& i : A){
         for(ll j{0}; j < (int)A.size() && 1LL * i * A[j] <= 2000003; ++j){
-            ch2[i * A[j]] = 1;
+            ch[i * A[j]] = 1;
         }
     }
     for(int i{0}; i <= 2000003; ++i){
-        if(ch2[i]) continue;
+        if(ch[i]) continue;
         cout << i; return 0;
     }
 }
