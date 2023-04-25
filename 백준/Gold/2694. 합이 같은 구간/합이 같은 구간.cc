@@ -15,105 +15,17 @@
 #define MOD 1000000007
 using namespace std;
 
-// #define ull __int128
-#define ull unsigned long long 
-
-// vl prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}; 
-vl prime = {2, 7, 61};
-
-ull modpow(ull a, ull b, ull mod){
-    ull ans{1};
-    while(b){
-        if(b & 1){
-            ans *= a;
-            ans %= mod;
-        }
-        a *= a;
-        a %= mod;
-        b >>= 1;
-    }
-    return ans;
-}
-
-bool miller_rabin(ull n, ull a){
-    if(a % n == 0) return 1;
-    ull k = n - 1;
-    while(k % 2 == 0){
-        if(modpow(a, k, n) == n - 1) return 1;
-        k /= 2;
-    }
-    ull temp = modpow(a, k, n);
-    return (temp == 1 || temp == n - 1);
-}
-
-bool check_prime(ull n){
-    for(int i{0}; i < (int)prime.size(); ++i){
-        // if(n == prime[i]) return 1;
-        // if(n > 40 && !miller_rabin(n, prime[i])) return 0;
-        if(!miller_rabin(n, prime[i])) return 0;
-    }
-    // if(n <= 40) return 0;
-    return 1;
-}
-
-ull mul(ull x, ull y, ull mod) {
-    x %= mod; 
-    y %= mod; 
-    return x * y % mod;
-}
-
-ull gcd(ull a, ull b){
-    if(b == 0) return a;
-    return gcd(b, a % b);
-}
-
-void pollard_rho(ll n, vector<ll>& v) {
-	if (n == 1) return;
-	if (n % 2 == 0) {
-		v.push_back(2);
-		pollard_rho(n / 2, v);
-		return;
-	}
-	if (check_prime(n)) {
-		v.push_back(n);
-		return;
-	}
-	ll a, b, c, g = n;
-    auto f = [&](ll x) {
-        return (c + mul(x, x, n)) % n;
-    };
-    do {
-        if (g == n) {
-            a = b = rand() % (n - 2) + 2;
-            c = rand() % 20 + 1;
-        }
-        a = f(a);
-        b = f(f(b));
-        g = gcd(abs(a - b), n);
-    } while (g == 1);
-	pollard_rho(g, v);
-	pollard_rho(n / g, v);
-}
-
-vl divisor(int n){
-    vl v;
-    pollard_rho(n, v);
-    unordered_map<int, int> mp;
-    for(auto& i : v) mp[i]++;
-    vl ret;
-    function<void(unordered_map<int,int>::iterator, ll)> f = [&](unordered_map<int,int>::iterator it, ll sum){
-        if(it == mp.end()){
-            ret.push_back(sum);
-        }
-        else{
-            f(next(it), sum);
-            for(int i{0}; i < it->second; ++i){
-                sum *= it->first;
-                f(next(it), sum);
+vi divisor(int n){
+    vi ret;
+    for(int i{1}; i * i <= n; ++i){
+        if(n % i == 0){
+            if(i * i == n) ret.push_back(i);
+            else{
+                ret.push_back(i);
+                ret.push_back(n / i);
             }
         }
-    };
-    f(mp.begin(), 1);
+    }
     sort(ret.begin(), ret.end());
     return ret;
 }
@@ -131,7 +43,7 @@ int main(){
             cin >> vec[i];
             sum += vec[i];
         }
-        vl div = divisor(sum);
+        vi div = divisor(sum);
         for(auto& i : div){
             sum = 0;
             for(int j{0}; j < n; ++j){
