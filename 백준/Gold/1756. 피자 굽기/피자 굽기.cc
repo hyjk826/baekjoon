@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
+#define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
+#define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
+#define vpl vector<pl>
+#define ll long long
+#define MAX 2147000000
+#define MOD 1000000007
+using namespace std;
+
+int main(){
+	fastio;
+    int n, m;
+    cin >> n >> m;
+    vi vec(n);
+    for(int i{n - 1}; i >= 0; --i){
+        cin >> vec[i];
+    }
+    for(int i{n - 2}; i >= 0; --i){
+        vec[i] = min(vec[i], vec[i + 1]);
+    }
+    int k = -1;
+    for(int i{0}; i < m; ++i){
+        int a;
+        cin >> a;
+        int idx = lower_bound(vec.begin() + k + 1, vec.end(), a) - vec.begin();
+        if(idx == n){
+            cout << 0; return 0;
+        }
+        k = idx;
+    }
+    cout << n - k;
+}
