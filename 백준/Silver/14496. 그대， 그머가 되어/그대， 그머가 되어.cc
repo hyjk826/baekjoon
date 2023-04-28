@@ -29,18 +29,21 @@ int main(){
         g[y].push_back(x);
     }
     queue<int> Q;
-    vi ch(n + 1, -1);
-    ch[a] = 0;
     Q.push(a);
+    vi dist(n + 1, -1);
+    dist[a] = 0;
     while(!Q.empty()){
         int x{Q.front()};
         Q.pop();
+        if(x == b){
+            cout << dist[x]; return 0;
+        }
         for(auto& i : g[x]){
-            if(ch[i] == -1){
-                ch[i] = ch[x] + 1;
+            if(dist[i] == -1){
+                dist[i] = dist[x] + 1;
                 Q.push(i);
             }
         }
     }
-    cout << ch[b];
+    cout << -1;
 }
