@@ -34,7 +34,7 @@ int main(){
         sort(g[i].begin(), g[i].end());
     }
     for(int i{1}; i <= n; ++i){
-        if(g[i].size() >= 80){
+        if(g[i].size() >= 70){
             dist[i].resize(n + 1, MAX);
             dist[i][i] = 0;
             for(auto& j : g[i]){
@@ -54,7 +54,7 @@ int main(){
             cout << mp[a][b] << "\n"; continue;
         }
         int ans{MAX};
-        if(g[a].size() >= 80){            
+        if(g[a].size() >= 70){            
             for(auto& i : g[b]){
                 ans = min(ans, dist[a][i.first] + i.second);
             }
