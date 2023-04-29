@@ -45,10 +45,14 @@ int main(){
             }
         }
     }
+    unordered_map<int, unordered_map<int, int> > mp;
     while(q--){
         int a, b;
         cin >> a >> b;
         if(g[a].size() < g[b].size()) swap(a, b);
+        if(mp.count(a) && mp[a].count(b)){
+            cout << mp[a][b] << "\n"; continue;
+        }
         int ans{MAX};
         if(g[a].size() >= 80){            
             for(auto& i : g[b]){
@@ -67,7 +71,8 @@ int main(){
                 }
             }
         }
-        if(ans == MAX) cout << -1 << "\n";
-        else cout << ans << "\n";
+        if(ans == MAX) ans = -1;
+        cout << ans << "\n";
+        mp[a][b] = ans;
     }
 }
