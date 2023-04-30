@@ -15,29 +15,31 @@
 #define MOD 1000000007
 using namespace std;
 
+bool A[300][300];
+bool B[300][300];
+
 int main(){
 	fastio;
     int n;
     cin >> n;
-    vector<vi> board(n, vi(n)), board2(n, vi(n));
     for(int i{0}; i < n; ++i){
         for(int j{0}; j < n; ++j){
-            cin >> board[i][j];
+            cin >> A[i][j];
         }
     }
     for(int i{0}; i < n; ++i){
         for(int j{0}; j < n; ++j){
-            cin >> board2[i][j];
+            cin >> B[i][j];
         }
     }
     int ans{0};
-    vector<vi> board3(n, vi(n));
     for(int i{0}; i < n; ++i){
         for(int j{0}; j < n; ++j){
+            int res{0};
             for(int k{0}; k < n; ++k){
-                board3[i][j] |= (board[i][k] & board2[k][j]);
+                res |= (A[i][k] & B[k][j]);
             }
-            if(board3[i][j]) ans++;
+            if(res) ans++;
         }
     }
     cout << ans;
