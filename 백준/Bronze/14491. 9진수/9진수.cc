@@ -17,13 +17,13 @@ using namespace std;
 
 int main(){
 	fastio;
-    int a;
-    cin >> a;
-    vi vec;
-    while(a){
-        vec.push_back(a % 9);
-        a /= 9;
+    int n;
+    cin >> n;
+    string str;
+    while(n){
+        str += char('0' + n % 9);
+        n /= 9;
     }
-    reverse(vec.begin(), vec.end());
-    for(auto& i : vec) cout << i;
+    reverse(str.begin(), str.end());
+    cout << str;
 }

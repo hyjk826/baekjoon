@@ -8,13 +8,13 @@
 
 ### 분류
 
-구현(implementation), 수학(math)
+구현, 수학
 
 ### 문제 설명
 
 <p>10진수를 9진수로 바꾸자.</p>
 
-<p>컴파일러: <img alt="" src="" style="height:114px; width:102px"></p>
+<p>컴파일러: <img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/14491/1.png" style="height:114px; width:102px"></p>
 
 ### 입력 
 
