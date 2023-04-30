@@ -17,10 +17,9 @@ using namespace std;
 
 int main(){
 	fastio;
-    int n;
-    double t;
-    cin >> n >> t;
-    vl X(n), V(n);
+    int n; double T;
+    cin >> n >> T;
+    vi X(n), V(n);
     for(int i{0}; i < n; ++i){
         cin >> X[i];
     }
@@ -29,9 +28,9 @@ int main(){
     }
     double l{-1e18}, r{1e18};
     for(int i{0}; i < n; ++i){
-        l = max(l, X[i] - V[i] * t);
-        r = min(r, X[i] + V[i] * t);
+        l = max(l, 1.0 * X[i] - V[i] * T);
+        r = min(r, 1.0 * X[i] + V[i] * T);
     }
-    if(r - l > -1e-08) cout << 1;
+    if(r + 1e-10 > l) cout << 1;
     else cout << 0;
 }
