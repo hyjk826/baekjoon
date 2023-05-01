@@ -46,7 +46,7 @@ int main(){
     ll ans{0};
     for(int i{1}; i < n; ++i){
         for(int j{1}; j < n; ++j){
-            map<int, int> A, B;
+            unordered_map<int, int> A, B;
             for(int x{1}; x <= i; ++x){
                 for(int y{1}; y <= j; ++y){
                     A[f(x, y, i, j)]++;
@@ -64,7 +64,7 @@ int main(){
     }
     for(int i{1}; i < n; ++i){
         for(int j{2}; j <= n; ++j){
-            map<int, int> A, B;
+            unordered_map<int, int> A, B;
             for(int x{1}; x <= i; ++x){
                 for(int y{j}; y <= n; ++y){
                     A[f(x, j, i, y)]++;
