@@ -16,8 +16,8 @@
 using namespace std;
 
 const int sz = 3e6 + 10;
-vpl seg(sz * 4);
-vl vec(sz);
+pi seg[sz * 4];
+int vec[sz];
 
 void init(int node, int l, int r){
     if(l == r) {
