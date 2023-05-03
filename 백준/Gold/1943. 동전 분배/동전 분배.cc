@@ -30,15 +30,22 @@ int main(){
         }
         if(sum & 1) cout << 0 << "\n";
         else{
+            vi A;
+            for(int i{0}; i < n; ++i){
+                int k{1};
+                while(k <= vec[i].second){
+                    A.push_back(vec[i].first * k);
+                    k *= 2;
+                }
+                k /= 2;
+                if(vec[i].second - k) A.push_back(vec[i].first * k);
+            }
             sum /= 2;
             vi dp(sum + 1);
             dp[0] = 1;
-            for(int i{0}; i < n; ++i){
-                for(int j{sum - vec[i].first}; j >= 0; --j){
-                    if(dp[j] == 0) continue;
-                    for(int k{1}; k <= vec[i].second && j + k * vec[i].first <= sum; ++k){
-                        dp[j + k * vec[i].first] = 1;
-                    }
+            for(auto& i : A){
+                for(int j{sum - i}; j >= 0; --j){
+                    if(dp[j]) dp[j + i] = 1;
                 }
             }
             if(dp[sum]) cout << 1 << "\n";
