@@ -19,7 +19,7 @@ int main(){
 	fastio;
 	int arr[] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
     ll dp[101];
-    for(int i{0}; i <= 100; ++i) dp[i] = (ll)1e17;
+    fill(dp, dp + 101, (ll)1e17);
     dp[0] = 0;
     dp[1] = (ll)1e17;
     for(int i{2}; i <= 100; ++i){
