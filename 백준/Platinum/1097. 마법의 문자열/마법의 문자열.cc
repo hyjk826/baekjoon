@@ -15,27 +15,17 @@
 #define MOD 1000000007
 using namespace std;
 
-vi Z_algorithm(string str){
-    int l{0}, r{0};
-    vi z((int)str.size());
-    for(int i{1}; i < (int)str.size(); ++i){
-        if(i > r){
-            l = r = i;
-            while(r < (int)str.size() && str[r - l] == str[r]) r++;
-            z[i] = r - l; r--;
-        }
-        else{
-            int k = i - l;
-            if(z[k] < r - i + 1) z[i] = z[k];
-            else{
-                l = i;
-                while(r < (int)str.size() && str[r - l] == str[r]) r++;
-                z[i] = r - l; r--;
-            }
-        }
-    }
-    return z;
+int table(string s) {
+	int m{ (int)s.size() };
+	vector<int> t(m);
+	int j{ 0 };
+	for (int i{ 1 }; i < m; ++i) {
+		while (j && s[i] != s[j]) j = t[j - 1];
+		if (s[i] == s[j]) t[i] = ++j;
+	}
+	return t.back();
 }
+
 
 int main(){
 	fastio;
@@ -57,15 +47,10 @@ int main(){
     do{
         string tmp;
         for(auto& i : A) tmp += vec[i];
-        auto Z = Z_algorithm(tmp);
         int mn{1};
-        for(int i{0}; i < (int)Z.size(); ++i){
-            if(Z[i] + i == a){
-                if(a % i == 0){
-                    mn = a / i; 
-                }
-                break;
-            }
+        auto b = table(tmp);
+        if(b){
+            if(a % (a - b) == 0) mn = a / (a -  b);
         }
         if(mn == k) ans++;
     }while(next_permutation(A.begin(), A.end()));
