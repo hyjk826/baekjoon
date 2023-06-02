@@ -15,7 +15,7 @@
 #define MOD 1000000007
 using namespace std;
 
-int dist[100][100][100][3]{};
+int dist[10][10][100][3]{};
 
 struct st{
     int x, y, cur, state;
