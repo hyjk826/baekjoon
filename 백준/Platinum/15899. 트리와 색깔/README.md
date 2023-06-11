@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 73908 KB, 시간: 380 ms
+메모리: 32604 KB, 시간: 204 ms
 
 ### 분류
 
-자료 구조(data_structures), 오일러 경로 테크닉(euler_tour_technique), 머지 소트 트리(merge_sort_tree), 세그먼트 트리(segtree), 정렬(sorting), 트리(trees)
+자료 구조, 오일러 경로 테크닉, 머지 소트 트리, 세그먼트 트리, 정렬, 트리
 
 ### 문제 설명
 

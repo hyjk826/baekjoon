@@ -1,4 +1,3 @@
-// 2022-12-26
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -16,65 +15,89 @@
 #define MOD 1000000007
 using namespace std;
 
-vi vec(200001);
-vector<vi> seg(800010);
-
-void init(int node, int l, int r){
-    if(l == r) seg[node].push_back(vec[l]);
-    else{
-        int m = (l + r) / 2;
-        init(node * 2, l, m);
-        init(node * 2 + 1, m + 1, r);
-        seg[node].resize(r - l + 1);
-        merge(seg[node * 2].begin(), seg[node * 2].end(), seg[node * 2 + 1].begin(), seg[node * 2 + 1].end(), seg[node].begin());
+template <typename T>
+struct binary_indexed_tree{
+  int N;
+  vector<T> BIT;
+  binary_indexed_tree(int N): N(N), BIT(N + 1, 0){
+  }
+  void add(int i, T x){
+    i++;
+    while (i <= N){
+      BIT[i] += x;
+      i += i & -i;
     }
-}
-
-int query(int node, int l, int r, int s, int e, int k){
-    if(s > r || e < l) return 0;
-    if(s <= l && r <= e){
-        return upper_bound(seg[node].begin(), seg[node].end(), k) - seg[node].begin();
+  }
+  T sum(int i){
+    T ans = 0;
+    while (i > 0){
+      ans += BIT[i];
+      i -= i & -i;
     }
-    int m = (l + r) / 2;   
-    return query(node * 2, l, m, s, e, k) + query(node * 2 + 1, m + 1, r, s, e, k);
-}
+    return ans;
+  }
+  T f(int a, int b){
+    if(a == 0) return sum(b + 1);
+    else return sum(b + 1) - sum(a);
+  }
+};
 
-int main(){
-	fastio;
+
+void solve(){
     int n, q, c;
     cin >> n >> q >> c;
-    vi A(n + 1);
-    for(int i{1}; i <= n; ++i){
-        cin >> A[i];
+    vector<vi> color(c);
+    for(int i{0}; i < n; ++i){
+        int a;
+        cin >> a;
+        a--;
+        color[a].push_back(i);
     }
-    vector<vi> g(n + 1);
+    vector<vi> g(n);
     for(int i{0}; i < n - 1; ++i){
         int a, b;
         cin >> a >> b;
+        a--; b--;
         g[a].push_back(b);
         g[b].push_back(a);
     }
-    vi in(n + 1), out(n + 1);
-    int cnt{-1};
-    function<void(int, int)> dfs = [&](int cur, int pre){
-        in[cur] = ++cnt;
+    vi in(n), out(n);
+    int pv{0};
+    function<void(int,int)> dfs = [&](int cur, int pre){
+        in[cur] = ++pv;
         for(auto& i : g[cur]){
             if(i == pre) continue;
             dfs(i, cur);
         }
-        out[cur] = cnt;
+        out[cur] = pv;
     };
-    dfs(1, -1);
-    for(int i{1}; i <= n; ++i){
-        vec[in[i]] = A[i];
-    }
-    init(1, 0, n - 1);
-    int ans{0};
-    while(q--){
+    dfs(0, -1);
+    vector<vi> query(c + 1);
+    for(int i{0}; i < q; ++i){
         int a, b;
         cin >> a >> b;
-        ans += query(1, 0, n - 1, in[a], out[a], b);
-        ans %= MOD;
+        a--; b--;
+        query[b].push_back(a);
+    }
+    ll ans{0};
+    binary_indexed_tree<int> BIT(n + 10);
+    for(int i{0}; i < c; ++i){
+        for(auto& j : color[i]){
+            BIT.add(in[j], 1);
+        }
+        for(auto& j : query[i]){
+            ans += BIT.f(in[j], out[j]);
+            ans %= MOD;
+        }
     }
     cout << ans;
+}
+
+int main(){
+	fastio;
+	int T;
+    T = 1;
+	while(T--){
+		solve();
+	}
 }
