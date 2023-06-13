@@ -26,27 +26,7 @@ struct Trie {
 	~Trie() {
 		for (int i = 0; i < 26; i++) if (ch[i]) delete ch[i];
 	}
-	void insert(string& str, int idx) {
-        if(idx) cnt++;
-		if (idx == (int)str.size()) {
-			this->end = true;
-			return;
-		}
-		int now = str[idx] - 'a';
-		if (!ch[now]) ch[now] = new Trie;
-		ch[now]->insert(str, idx + 1);
-	}
-	void find(string& str,  vi& v, int idx) {
-        if(idx) v.push_back(cnt);
-		if (idx == (int)str.size()) return;
-		int now = str[idx] - 'a';
-		if (!ch[now]) return;
-		ch[now]->find(str, v, idx + 1);
-	}
 };
-
-
-
 
 void solve(){
     int n;
@@ -55,7 +35,13 @@ void solve(){
     for(int i{0}; i < n; ++i) cin >> vec[i];
     Trie* root = new Trie;
     for(int i{0}; i < n; ++i){
-        root->insert(vec[i], 0);
+        Trie* cur = root;
+        for(int j{0}; j < (int)vec[i].size(); ++j){
+            int now = vec[i][j] - 'a';
+            if(!cur->ch[now]) cur->ch[now] = new Trie;
+            cur = cur->ch[now];
+            cur->cnt++;
+        }
     }
     string str;
     cin >> str;
