@@ -31,7 +31,7 @@ void solve(){
         g[a].push_back({b, c});
         g[b].push_back({a, c});
     }
-    vp ch(n + 1, {-2, -2});
+    vpl ch(n + 1, {-2, -2});
     function<void(int)> dfs = [&](int cur){
         for(auto& i : g[cur]){
             if(ch[i.first].first == -2){
@@ -72,7 +72,7 @@ void solve(){
     else if(B.size() == 1){
         cout << "Yes\n";
         for(int i{1}; i <= n; ++i){
-            cout << B[0] * ch[i].first + ch[i].second << " ";
+            cout << 1LL * B[0] * ch[i].first + ch[i].second << " ";
         }
     }
     else{
@@ -80,7 +80,7 @@ void solve(){
         int k = A[(int)A.size() / 2];
         cout << "Yes\n";
         for(int i{1}; i <= n; ++i){
-            cout << k * ch[i].first + ch[i].second << " ";
+            cout << 1LL * k * ch[i].first + ch[i].second << " ";
         }
     }
 
