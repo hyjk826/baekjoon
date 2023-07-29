@@ -19,27 +19,35 @@ struct st{
     int v, c, d;
 };
 
+
+vector<vector<st>> g(101);
+vector<vi> dp(101, vi(10001, -1));
+
+int n, k, m;
+
+int f(int a, int b){
+    if(dp[a][b] != -1) return dp[a][b];
+    int& ret = dp[a][b];
+    if(a == n) return ret = 0;
+    ret = MAX;
+    for(auto& i : g[a]){
+        if(b + i.c > k) continue;
+        ret = min(ret, i.d + f(i.v, b + i.c)); 
+    }
+    return ret;
+}
+
 void solve(){
-	int n, k, m;
     cin >> n >> k >> m;
-    vector<vector<st>> g(n + 1);
+    for(int i{1}; i <= n; ++i){
+        g[i].clear();
+        for(int j{0}; j <= k; ++j) dp[i][j] = -1;
+    }
     for(int i{0}; i < m; ++i){
         int a, b, c, d;
         cin >> a >> b >> c >> d;
         g[a].push_back({b, c, d});
     }
-    vector<vi> dp(n + 1, vi(k + 1, -1));
-    function<int(int,int)> f = [&](int a, int b){
-        if(dp[a][b] != -1) return dp[a][b];
-        int& ret = dp[a][b];
-        if(a == n) return ret = 0;
-        ret = MAX;
-        for(auto& i : g[a]){
-            if(b + i.c > k) continue;
-            ret = min(ret, i.d + f(i.v, b + i.c)); 
-        }
-        return ret;
-    };
     int ans = f(1, 0);
     if(ans == MAX) cout << "Poor KCM\n";
     else cout << ans << "\n";
