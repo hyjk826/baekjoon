@@ -27,7 +27,7 @@ int gcd(int a, int b){
     return gcd(b, a % b);
 }
 
-int ch[5001][5001];
+bool ch[5001][5001];
 
 void solve(){
 	int n, k;
