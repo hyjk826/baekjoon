@@ -1,4 +1,4 @@
-// 2022-09-14
+// 2022-07-28
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -17,22 +17,24 @@ using namespace std;
 
 int main() {
 	fastio;
-    int n, m;
-    cin >> n >> m;
-    set<int> st;
-    for(int i{1}; i <= n; ++i) st.insert(i);
-    for(int i{0}; i < m; ++i){
-        int a;
-        cin >> a;
-        auto it = st.upper_bound(a);
-        if(it == st.begin()){
+    int g, p;
+    cin >> g >> p;
+    vi vec(p);
+    for(int i{0}; i < p; ++i){
+        cin >> vec[i];
+    }
+    set<int> s;
+    for(int i{1}; i <= g; ++i){
+        s.insert(i);
+    }
+    for(int i{0}; i < p; ++i){
+        auto it = s.upper_bound(vec[i]);
+        if(it == s.begin()){
             cout << i;
             return 0;
         }
-        it--;
-        st.erase(it);
+        else s.erase(prev(it));
     }
-    cout << m;
+    cout << p;
 }
-	
 
