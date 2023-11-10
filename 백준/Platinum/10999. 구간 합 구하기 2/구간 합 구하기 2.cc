@@ -1,91 +1,111 @@
-#include <iostream>
-#include <queue>
-#include <string>
-#include <stack>
-#include <algorithm>
-#include <cmath>
-#include <set>
-#include <map>
-#include <unordered_set>
+#include <bits/stdc++.h>
+#define fastio                    \
+	ios_base::sync_with_stdio(0); \
+	cin.tie(0);
 #define vi vector<int>
+#define vl vector<long long>
+#define vc vector<char>
+#define vs vector<string>
 #define pi pair<int, int>
+#define pl pair<ll, ll>
+#define vp vector<pi>
+#define vpl vector<pl>
 #define ll long long
 #define MAX 2147000000
-#define MOD 998244353
+#define MOD 1000000007
 using namespace std;
 
-struct st {
-	ll v, lazy;
+struct st{
+    ll v, lazy;
+    st(){
+        lazy = 0;
+    }
 };
 
-vector<st> segTree(4000001);
-vector<ll> vec(1000001);
+const int sz = (int)1e6 + 10;
+st seg[sz * 4];
+ll arr[sz];
+ll n, a, b;
 
-ll init(int node, int s, int e) {
-	if (s == e) return segTree[node].v = vec[s];
-	int m{ (s + e) / 2 };
-	return segTree[node].v = init(node * 2, s, m) + init(node * 2 + 1, m + 1, e);
+void init(int node, int l, int r){
+    if(l == r) seg[node].v = arr[l];
+    else{
+        int mid{(l + r) >> 1};
+        init(node << 1, l , mid);
+        init(node << 1 | 1, mid + 1, r);
+        seg[node].v = seg[node << 1].v + seg[node << 1 | 1].v;
+    }
 }
 
-void update(int node, int s, int e, int l, int r, ll diff) {
-	if (segTree[node].lazy != 0) {
-		segTree[node].v += segTree[node].lazy * (ll)(e - s + 1);
-		if (s != e) {
-			segTree[node * 2].lazy += segTree[node].lazy;
-			segTree[node * 2 + 1].lazy += segTree[node].lazy;
-		}
-		segTree[node].lazy = 0;
-	}
-	if (r < s || e < l) return;
-	if (l <= s && e <= r) {
-		segTree[node].v += diff * (ll)(e-s+1);
-		if (s != e) {
-			segTree[node * 2].lazy += diff;
-			segTree[node * 2 + 1].lazy += diff;
-		}
-		return;
-	}
-	int m{ (s + e) / 2 };
-	update(node * 2, s, m, l, r, diff);
-	update(node * 2 + 1, m + 1, e, l, r, diff);
-	segTree[node].v = segTree[node * 2].v + segTree[node * 2 + 1].v;
+void propogate(int node, int l, int r){
+    if(seg[node].lazy){
+        seg[node].v += (r - l + 1) * seg[node].lazy;
+        if(l ^ r){
+            seg[node << 1].lazy += seg[node].lazy;
+            seg[node << 1 | 1].lazy += seg[node].lazy;
+        }
+        seg[node].lazy = 0;
+    }
 }
 
-ll sum(int node, int s, int e, int l, int r) {
-	if (segTree[node].lazy != 0) {
-		segTree[node].v += segTree[node].lazy * (ll)(e - s + 1);
-		if (s != e) {
-			segTree[node * 2].lazy += segTree[node].lazy;
-			segTree[node * 2 + 1].lazy += segTree[node].lazy;
-		}
-		segTree[node].lazy = 0;
-	}
-	if (r < s || e < l) return 0;
-	if (l <= s && e <= r) return segTree[node].v;
-	int m{ (s + e) / 2 };
-	return sum(node * 2, s, m, l, r) + sum(node * 2 + 1, m + 1, e, l, r);
+
+void update(int node, int l, int r, int s, int e, ll k){
+    propogate(node, l, r);
+    if(e < l || r < s) return;
+    if(s <= l && r <= e){
+        seg[node].lazy += k;
+        propogate(node, l, r);
+    }
+    else{
+        int mid{(l + r) >> 1};
+        update(node << 1, l, mid, s, e, k);
+        update(node << 1 | 1, mid + 1, r, s, e, k);
+        seg[node].v = seg[node << 1].v + seg[node << 1 | 1].v;
+    }
 }
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	int n, m, k;
-	cin >> n >> m >> k;
-	for (int i{ 0 }; i < n; ++i) {
-		cin >> vec[i];
-	}
-	init(1, 0, n - 1);
-	for (int i{ 0 }; i < m + k; ++i) {
-		int a, b, c;
-		cin >> a;
-		if (a == 1) {
-			ll d;
-			cin >> b >> c >> d;
-			update(1, 0, n - 1, b - 1, c - 1, d);
-		}
-		else if (a == 2) {
-			cin >> b >> c;
-			cout << sum(1, 0, n - 1, b - 1, c - 1) << "\n";
-		}
+ll query(int node, int l, int r, int s, int e){
+    propogate(node, l, r);
+    if(r < s || e < l) return 0LL;
+    if(s <= l && r <= e){
+        return seg[node].v;
+    }
+    else{
+        int mid{(l + r) >> 1};
+        return query(node << 1, l, mid, s, e) + query(node << 1 | 1, mid + 1, r, s, e);
+    }
+}
+
+
+
+void solve(){    
+    cin >> n >> a >> b;
+    for(int i{1}; i <= n; ++i){
+        cin >> arr[i];
+    }
+    init(1, 1, n);
+    for(int i{0}; i < a + b; ++i){
+        int op;
+        cin >> op;
+        if(op == 1){
+            int l, r;
+            ll k;
+            cin >> l >> r >> k;
+            update(1, 1, n, l, r, k);
+        }
+        else{
+            int l, r;
+            cin >> l >> r;
+            cout << query(1, 1, n, l, r) << "\n";
+        }
+    }
+}
+
+int main(){
+	fastio;
+	int T;
+	T = 1;
+	while(T--){
+		solve();
 	}
 }
