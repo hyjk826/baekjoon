@@ -1,4 +1,3 @@
-// 2022-09-14
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -10,71 +9,70 @@
 #define pi pair<int, int>
 #define pl pair<ll, ll>
 #define vp vector<pi>
+#define vpl vector<pl>
 #define ll long long
 #define MAX 2147000000
 #define MOD 1000000007
 using namespace std;
 
-vl seg(4000001);
-vl vec(1000000);
+int n, a, b;
+const int sz = (int)1e6 + 10;
+ll seg[sz * 4];
+ll arr[sz];
 
 void init(int node, int l, int r){
-    if(l == r){
-        seg[node] = vec[l];
+    if(l == r) seg[node] = arr[l];
+    else{
+        int mid{(l + r) >> 1};
+        init(node << 1, l, mid);
+        init(node << 1 | 1, mid + 1, r);
+        seg[node] = seg[node << 1] + seg[node << 1 | 1];
+    }
+}
+
+void update(int node, int l, int r, int idx, ll k){
+    if(idx < l || idx > r) return;
+    if(l == r) {
+        seg[node] = k;
     }
     else{
-        int m = (l + r) / 2;
-        init(node * 2, l, m);
-        init(node * 2 + 1, m + 1, r);
-        seg[node] = seg[node * 2] + seg[node * 2 + 1];
+        int mid{(l + r) >> 1};
+        update(node << 1, l, mid, idx, k);
+        update(node << 1 | 1, mid + 1, r, idx, k);
+        seg[node] = seg[node << 1] + seg[node << 1 | 1];
     }
 }
 
-ll sum(int node, int l, int r, int s, int e){
-    if(r < s || e < l) return 0;
-    if(s <= l && r <= e) return seg[node];
-    int m = (l + r) / 2;
-    return sum(node * 2, l, m, s, e) + sum(node * 2 + 1, m + 1, r, s, e);
+ll query(int node, int l, int r, int s, int e){
+    if(r < s || e < l) return 0LL;
+    if(s <= l && r <= e) return (ll)seg[node];
+    int mid{(l + r) >> 1};
+    return query(node << 1, l, mid, s, e) + query(node << 1 | 1, mid + 1, r, s, e);
 }
 
-void update(int node, int l, int r, int idx, ll value){
-    if(l > idx || r < idx) return;
-    if(l == r){
-        seg[node] = value;
-        vec[idx] = value;
+void solve(){
+	cin >> n >> a >> b;
+    for(int i{1}; i <= n; ++i){
+        cin >> arr[i];
     }
-    else{
-        int m = (l + r) / 2;
-        update(node * 2, l, m, idx, value);
-        update(node * 2 + 1, m + 1, r, idx, value);            
-        seg[node] = seg[node * 2] + seg[node * 2 + 1];
-    }
-}
-
-
-
-
-int main() {
-	fastio;
-    int n, m, k;
-    cin >> n >> m >> k;
-    for(int i{0}; i < n; ++i){
-        cin >> vec[i];
-    }
-    init(1, 0, n - 1);
-    for(int i{0}; i < m + k; ++i){
-        ll q, a, b;
-        cin >> q >> a >> b;
-        if(q == 1){
-            a--;
-            update(1, 0, n - 1, a, b);
+    init(1, 1, n);
+    for(int i{0}; i < a + b; ++i){
+        ll op, l, r;
+        cin >> op >> l >> r;
+        if(op == 1){
+            update(1, 1, n, l, r);
         }
         else{
-            a--;
-            b--;
-            cout << sum(1, 0, n - 1, a, b) << "\n";
+            cout << query(1, 1, n, l, r) << "\n";
         }
     }
 }
-	
 
+int main(){
+	fastio;
+	int T;
+	T = 1;
+	while(T--){
+		solve();
+	}
+}
