@@ -22,10 +22,10 @@ void solve(){
 	int n;
     cin >> n;
     set<pi> st;
-    vp vec(n);
     for(int i{0}; i < n; ++i){
-        cin >> vec[i].first >> vec[i].second;
-        st.insert({vec[i].first, vec[i].second});
+        int a, b;
+        cin >> a >> b;
+        st.insert({a, b});
     }
     vi tmp;
     ll ans{0};
