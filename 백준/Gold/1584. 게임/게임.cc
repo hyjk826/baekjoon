@@ -15,7 +15,7 @@
 #define MOD 1000000007
 using namespace std; 
 
-ll board[502][502];
+int board[502][502];
 int ch[502][502];
 int xx[]{-1,0,1,0};
 int yy[]{0,1,0,-1};
@@ -40,10 +40,10 @@ void solve(){
         cin >> x1 >> y1 >> x2 >> y2;
         if(x1 > x2) swap(x1, x2);
         if(y1 > y2) swap(y1, y2);
-        board[x1][y1] += MAX;
-        board[x1][y2 + 1] -= MAX;
-        board[x2 + 1][y1] -= MAX;
-        board[x2 + 1][y2 + 1] += MAX;
+        board[x1][y1] += 100;
+        board[x1][y2 + 1] -= 100;
+        board[x2 + 1][y1] -= 100;
+        board[x2 + 1][y2 + 1] += 100;
     }
     for(int i{0}; i <= 500; ++i){
         for(int j{1}; j <= 500; ++j){
@@ -67,7 +67,7 @@ void solve(){
             int nx{x + xx[dir]};
             int ny{y + yy[dir]};
             if(nx < 0 || nx > 500 || ny < 0 || ny > 500) continue;
-            if(board[nx][ny] >= MAX) continue;
+            if(board[nx][ny] >= 100) continue;
             if(board[nx][ny] == 0) {
                 if(ch[nx][ny] == -1) {
                     ch[nx][ny] = ch[x][y];
