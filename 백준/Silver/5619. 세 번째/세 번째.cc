@@ -22,7 +22,7 @@ void solve(){
     for(int i{0}; i < n; ++i){
         int x;
         cin >> x;
-        if(pQ.size() < 10) pQ.push(x);
+        if(pQ.size() < 4) pQ.push(x);
         else{
             if(pQ.top() > x){
                 pQ.pop();
