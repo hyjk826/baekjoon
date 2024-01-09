@@ -1,4 +1,3 @@
-// 2022-09-25
 #include <bits/stdc++.h>
 #define fastio                    \
 	ios_base::sync_with_stdio(0); \
@@ -10,45 +9,45 @@
 #define pi pair<int, int>
 #define pl pair<ll, ll>
 #define vp vector<pi>
-#define ll long long
+#define vpl vector<pl>
 #define MAX 2147000000
 #define MOD 1000000007
+typedef long long ll;
 using namespace std;
 
-int main() {
-	fastio;
-    int n;
+int xx[]{-1,0,1,0,0};
+int yy[]{0,-1,0,1,0};
+
+void solve(){
+	int n;
     cin >> n;
-    int x, y;
-    cin >> x >> y;
-    vp vec(n);
-    for(int i{0}; i < n; ++i){
+    vp vec(n + 1);
+    for(int i{0}; i <= n; ++i){
         cin >> vec[i].first >> vec[i].second;
     }
-    vector<vl> dp(n, vl(4, (ll)1e18));
-    int xx[]{-1,0,1,0};
-    int yy[]{0,1,0,-1};
-    for(int i{0}; i < n; ++i){
-        for(int j{0}; j < 4; ++j){
-            int nx{vec[i].first + xx[j]};
-            int ny{vec[i].second + yy[j]};
-            if(i == 0){
-                dp[i][j] = abs(x - nx) + abs(y - ny);
-            }
-            else{
-                for(int k{0}; k < 4; ++k){
-                    int a = vec[i - 1].first + xx[k];
-                    int b = vec[i - 1].second + yy[k];
-                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + abs(nx - a) + abs(ny - b));
-                }
-            }
+    vector<vl> dp(n + 1, vl(5, -1));
+    function<ll(int,int)> f = [&](int a, int b){
+        if(a == n) return 0LL;
+        if(dp[a][b] != -1) return dp[a][b];
+        ll& ret = dp[a][b];
+        ret = LLONG_MAX;
+        int x = vec[a].first + xx[b];
+        int y = vec[a].second + yy[b];
+        for(int i{0}; i < 5; ++i){
+            int nx{vec[a + 1].first + xx[i]};
+            int ny{vec[a + 1].second + yy[i]};
+            ret = min(ret, abs(x - nx) + abs(y - ny) + f(a + 1, i));
         }
-    }
-    ll ans{LLONG_MAX};
-    for(int i{0}; i < 4; ++i){
-        ans = min(ans, dp[n - 1][i]);
-    }
-    cout << ans;
+        return ret;
+    };
+    cout << f(0, 4) << "\n";
 }
-	
 
+int main(){
+	fastio;
+	int T;
+	T = 1;
+	while(T--){
+		solve();
+	}
+}
