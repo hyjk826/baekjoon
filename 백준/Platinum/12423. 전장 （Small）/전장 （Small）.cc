@@ -19,7 +19,7 @@ using namespace std;
 #define y second
 typedef pair<int, int> p;
 
-const int SZ = 200 + 10;
+const int SZ = 10;
 struct MCMF{
 	int s, t; //source, sink
 	struct Edge{ int v, c, d, dual; };
@@ -123,17 +123,17 @@ void solve(){
     int sink = SZ - 1;
     int n;
     cin >> n;
-    vp A, B;
+    vi A, B;
     int cnt{0};
     for(int i{0}; i < 3; ++i) {
         int a;
         cin >> a;
-        for(int j{0}; j < a; ++j) A.push_back({cnt++, i});
+        A.push_back(a);
     }
     for(int i{0}; i < 3; ++i) {
         int a;
         cin >> a;
-        for(int j{0}; j < a; ++j) B.push_back({cnt++, i});
+        B.push_back(a);
     }
     int board[3][3];
     for(int i{0}; i < 3; ++i){
@@ -141,14 +141,12 @@ void solve(){
             cin >> board[i][j];
         }
     }
-    for(auto& i : A){
-        mcmf.addEdge(source, i.first, 1, 0);
-        for(auto& j : B) {
-            mcmf.addEdge(i.first, j.first, 1, -board[i.second][j.second]);
-        }
+    for(int i{0}; i < 3; ++i){
+        mcmf.addEdge(source, i, A[i], 0);
+        for(int j{0}; j < 3; ++j) mcmf.addEdge(i, j + 3, A[i], -board[i][j]);
     }
-    for(auto& i : B){
-        mcmf.addEdge(i.first, sink, 1, 0);
+    for(int i{0}; i < 3; ++i){
+        mcmf.addEdge(i + 3, sink, B[i], 0);
     }
     cout << -mcmf.run(source, sink).first << "\n";
 }
